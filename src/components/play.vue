@@ -419,10 +419,10 @@ export default {
     },
     // timeupdate事件大概每秒一次，更新音频流的当前播放时间
     onTimeupdate(res) {
-      console.log(res);
+      // console.log(res);
       this.timeVal = res.target.currentTime;
       this.currentTime = this.realFormatSecond(res.target.currentTime);
-      Math.floor(timeVal);
+      Math.floor(this.timeVal);
       for (var i in this.geci) {
         if (this.timeVal /*当前播放的时间*/ <= this.geci[i].time) {
           //显示到页面
@@ -441,8 +441,14 @@ export default {
     },
 
     changeCurrentTime(e) {
-      this.pFn.debounce(this.setPlayPosition(e), 2000);
+      console.log(this.$refs.audio);
+      // if(e!==this.$refs.audio.currentTime){
+      //   this.pFn.debounce(this.setPlayPosition(e), 2000);
+      //   console.log(e-this.$refs.audio.currentTime);
+      // }
+      
     },
+    //音频节点跳转
     setPlayPosition(e) {
       if (this.$refs.audio) {
         this.$refs.audio.currentTime = e;
