@@ -35,11 +35,11 @@ export default {
   mounted() {},
   data() {
     return {
-      playEvent: true
+      playEvent: false,
     };
   },
   components: {
-    play: play
+    play: play,
   },
   created() {},
   methods: {
@@ -53,8 +53,8 @@ export default {
     },
     nextPlay() {
       this.$refs.playPage.NextSong();
-    }
-  }
+    },
+  },
 };
 </script>
 

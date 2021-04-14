@@ -68,7 +68,7 @@
             :id="item.id"
           >
             <img class="mImg" :src="item.picUrl" />
-            <div class="mImg-bg-icon" style="top: 4px;">
+            <div class="mImg-bg-icon" style="top: 4px">
               <i class="fa fa-headphones"></i>
               {{ Math.round(item.playCount / 10000) }}万
             </div>
@@ -79,11 +79,12 @@
     </div>
     <musicList
       @playSong="playSong"
+      :key="songCont"
       :song="songCont"
-      :pass="songId"
-      v-if="songCont"
+      v-show="songCont"
       ref="mySong"
     ></musicList>
+    <!-- :pass="songId" -->
   </div>
 </template>
 
@@ -98,7 +99,7 @@ export default {
     var mySwiper = new Swiper(".swiper-container", {
       loop: true,
       // 如果需要分页器
-      pagination: ".swiper-pagination"
+      pagination: ".swiper-pagination",
     });
   },
   destory() {
@@ -112,43 +113,43 @@ export default {
       menuList: ["每日推荐", "歌单", "排行榜", "电台", "私人FM"],
       swiperOption: {
         pagination: {
-          el: ".swiper-pagination"
+          el: ".swiper-pagination",
         },
         autoplay: {
           delay: 6000,
-          disableOnInteraction: false
-        }
+          disableOnInteraction: false,
+        },
       },
       songCont: "",
       playSong: "",
-      nowDete: ""
+      nowDete: "",
     };
   },
   components: {
-    musicList: musicList
+    musicList: musicList,
   },
   methods: {
-    getData: function() {
+    getData: function () {
       let D = new Date();
       this.nowDate = D.getDate();
 
-      this.$axios.get("/banner").then(re => {
+      this.$axios.get("/banner?type=0").then((re) => {
         this.dataList = re.data.banners;
       });
-      this.$axios.get("/personalized").then(re => {
+      this.$axios.get("/personalized").then((re) => {
         this.recommendList = re.data.result;
 
         this.$nextTick(() => {
           //$refs绑定元素
           if (!this.scroll) {
             this.scroll = new BScroll(this.$refs.Mbox, {
-              click: true //开启点击事件 默认为false
+              click: true, //开启点击事件 默认为false
             });
           }
         });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
-  <transition id="musicList" name="fade">
-    <div class="music-list" ref="Mbox" v-show="showDetail">
-      <div class="ml-head " :class="{ headTop: isTop }">
+  <transition id="musicList" name="fade" v-show="showDetail">
+    <div class="music-list" ref="Mbox" v-if="songList.length !== 0">
+      <div class="ml-head" :class="{ headTop: isTop }">
         <div class="back" @click="musiclistToggle()">
           <i class="el-icon-back"></i>
         </div>
@@ -22,20 +22,20 @@
             <div
               class="SLB-maskBg"
               v-bind:style="{
-                backgroundImage: 'url(' + songList.coverImgUrl + ')'
+                backgroundImage: 'url(' + songList.coverImgUrl + ')',
               }"
             ></div>
             <div class="songList-bg-box">
               <img class="songList-bg" :src="songList.coverImgUrl" />
-              <div class="songList-bg-icon" style="top: 4px;">
+              <div class="songList-bg-icon" style="top: 4px">
                 <i class="fa fa-headphones"></i>
                 {{ Math.round(songList.playCount / 10000) }}万
               </div>
-              <i class="el-icon-info songList-bg-icon" style="bottom:4px;"></i>
+              <i class="el-icon-info songList-bg-icon" style="bottom: 4px"></i>
             </div>
             <div class="songListName">
               <div class="SLN-top">{{ songList.name }}</div>
-              <div class="SLN-bot">
+              <div class="SLN-bot" v-if="songList.creator">
                 <img
                   :src="songList.creator.avatarUrl"
                   alt=""
@@ -108,7 +108,7 @@ import BScroll from "@better-scroll/core";
 
 export default {
   props: {
-    song: Number
+    song: Number,
   },
   created() {
     // this.getData();
@@ -125,36 +125,34 @@ export default {
       ishide: true,
       isTop: false,
       showDetail: false,
-      songInfo: {}
+      songInfo: {},
     };
   },
   methods: {
-    getData: function() {
+    getData: function () {
       var that = this;
       if (this.song != undefined && this.song != null && this.song != "") {
-        this.$axios
-          .get("/playlist/detail?id=" + this.song)
-          .then(re => {
-            this.songList = re.data.result;
-            that.$store.state.songList = re.data.result.tracks;
-            // this.btScroll();
-            // this.$nextTick(() => {
-            // 	//$refs绑定元素
-            // 	if(!this.scroll){
-            // 		this.scroll = new BScroll(this.$refs.Mbox, {
-            // 		click:true   //开启点击事件 默认为false
-            // 	})
-            // 	}
-            // })
-          });
+        this.$axios.get("/playlist/detail?id=" + this.song).then((re) => {
+          this.songList = re.data.playlist;
+          that.$store.state.songList = re.data.playlist.tracks;
+          // this.btScroll();
+          // this.$nextTick(() => {
+          // 	//$refs绑定元素
+          // 	if(!this.scroll){
+          // 		this.scroll = new BScroll(this.$refs.Mbox, {
+          // 		click:true   //开启点击事件 默认为false
+          // 	})
+          // 	}
+          // })
+        });
       }
     },
     sollorder() {
       this.detailWrapper = new BScroll(this.$refs.gedan, {
-        click: true //开启点击事件 默认为false
+        click: true, //开启点击事件 默认为false
       });
     },
-    handleScroll: function() {
+    handleScroll: function () {
       var scrollTop =
         window.pageYOffset ||
         document.documentElement.scrollTop ||
@@ -169,12 +167,12 @@ export default {
       //				scrollTop>=120?this.ishide=false:this.ishide=true
     },
     // 退出歌单
-    musiclistToggle: function() {
+    musiclistToggle: function () {
       this.showToggle(1);
       // this.songList =[]
       // window.removeEventListener('scroll', this.handleScroll)
-    }
-  }
+    },
+  },
 };
 </script>
 

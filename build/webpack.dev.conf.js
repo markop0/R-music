@@ -48,7 +48,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll
-    }
+    },
+    disableHostCheck: true,
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -91,8 +92,7 @@ module.exports = new Promise((resolve, reject) => {
         new FriendlyErrorsPlugin({
           compilationSuccessInfo: {
             messages: [
-              `Your application is running here: http://${
-                devWebpackConfig.devServer.host
+              `Your application is running here: http://${devWebpackConfig.devServer.host
               }:${port}`
             ]
           },

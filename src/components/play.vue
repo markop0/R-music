@@ -110,7 +110,7 @@
       <div
         class="palymask"
         v-bind:style="{
-          backgroundImage: 'url(' + $store.state.playInfo.bgurl + ')'
+          backgroundImage: 'url(' + $store.state.playInfo.bgurl + ')',
         }"
       ></div>
       <div class="blackmask" v-show="!AorB"></div>
@@ -134,7 +134,7 @@
                   <p class="art">{{ item.artists[0].name }}</p>
                 </div>
                 <i
-                  class="delMusic flex el-icon-close "
+                  class="delMusic flex el-icon-close"
                   @click.stop="delMusic(index)"
                 ></i>
               </div>
@@ -173,12 +173,12 @@ export default {
       geciTime: "",
       playSet: 0,
       miniMusicList: false,
-      xx1: 0
+      xx1: 0,
       // isEnd:this.$refs.audio.ended
     };
   },
   components: {
-    comment: comment
+    comment: comment,
   },
   watch: {
     // timeVal() {
@@ -203,7 +203,7 @@ export default {
     },
     ddCls() {
       return this.playing ? "dian" : "dian pause";
-    }
+    },
   },
   methods: {
     setPlay() {
@@ -259,11 +259,8 @@ export default {
       if (this.$store.state.playInfo.id !== "") {
         // 获取歌词
         this.$axios
-          .get(
-            "/lyric?id=" +
-              this.$store.state.playInfo.id
-          )
-          .then(re => {
+          .get("/lyric?id=" + this.$store.state.playInfo.id)
+          .then((re) => {
             console.log("歌词");
             var geci = [];
             if (re.data.lrc !== undefined) {
@@ -294,12 +291,9 @@ export default {
     toggleLike() {
       this.$axios
         .get(
-          "/like?id=" +
-            this.$store.state.playInfo.id +
-            "&like=" +
-            !this.isLike
+          "/like?id=" + this.$store.state.playInfo.id + "&like=" + !this.isLike
         )
-        .then(re => {
+        .then((re) => {
           consloe.log(this.isLike);
           this.isLike = !this.isLike;
         });
@@ -309,7 +303,7 @@ export default {
     },
     sollorder() {
       this.detailWrapper = new BScroll(this.$refs.geciBox, {
-        click: true //开启点击事件 默认为false
+        click: true, //开启点击事件 默认为false
       });
     },
     // 控制音频的播放与暂停
@@ -359,7 +353,7 @@ export default {
         name: A[nextNum].name,
         art: Artists,
         bgurl: Bgurl,
-        index: nextNum
+        index: nextNum,
       };
       this.$store.state.playInfo = songInfo;
       this.getMusicUrl();
@@ -383,7 +377,7 @@ export default {
         name: A[nextNum].name,
         art: Artists,
         bgurl: Bgurl,
-        index: nextNum
+        index: nextNum,
       };
       this.$store.state.playInfo = songInfo;
       this.getMusicUrl();
@@ -391,11 +385,8 @@ export default {
     getMusicUrl() {
       // 获取歌曲链接
       this.$axios
-        .get(
-          "/music/url?id=" +
-            this.$store.state.playInfo.id
-        )
-        .then(re => {
+        .get("/music/url?id=" + this.$store.state.playInfo.id)
+        .then((re) => {
           re.data.code != 200
             ? ""
             : (this.$store.state.audio = re.data.data[0].url);
@@ -428,18 +419,18 @@ export default {
     },
     // timeupdate事件大概每秒一次，更新音频流的当前播放时间
     onTimeupdate(res) {
-      // console.log(res);
-      // this.timeVal = res.target.currentTime;
-      // this.currentTime = this.realFormatSecond(res.target.currentTime);
-      // Math.floor(timeVal);
-      // for (var i in this.geci) {
-      //   if (this.timeVal /*当前播放的时间*/ <= this.geci[i].time) {
-      //     //显示到页面
-      //     this.geciTime = this.geci[i - 1].time;
-      //     // this.scroll.scrollTo(0, -40*i, 300, ease['swipeBounce'])
-      //     return;
-      //   }
-      // }
+      console.log(res);
+      this.timeVal = res.target.currentTime;
+      this.currentTime = this.realFormatSecond(res.target.currentTime);
+      Math.floor(timeVal);
+      for (var i in this.geci) {
+        if (this.timeVal /*当前播放的时间*/ <= this.geci[i].time) {
+          //显示到页面
+          this.geciTime = this.geci[i - 1].time;
+          // this.scroll.scrollTo(0, -40*i, 300, ease['swipeBounce'])
+          return;
+        }
+      }
     },
     // 当加载语音流元数据完成后，会触发该事件的回调函数
     // 语音元数据主要是语音的长度之类的数据
@@ -456,31 +447,31 @@ export default {
       if (this.$refs.audio) {
         this.$refs.audio.currentTime = e;
       }
-    }
-  }
+    },
+  },
 };
 export const ease = {
   // easeOutQuint
   swipe: {
     style: "cubic-bezier(0.23, 1, 0.32, 1)",
-    fn: function(t) {
+    fn: function (t) {
       return 1 + --t * t * t * t * t;
-    }
+    },
   },
   // easeOutQuard
   swipeBounce: {
     style: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-    fn: function(t) {
+    fn: function (t) {
       return t * (2 - t);
-    }
+    },
   },
   // easeOutQuart
   bounce: {
     style: "cubic-bezier(0.165, 0.84, 0.44, 1)",
-    fn: function(t) {
+    fn: function (t) {
       return 1 - --t * t * t * t;
-    }
-  }
+    },
+  },
 };
 </script>
 
