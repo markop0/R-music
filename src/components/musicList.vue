@@ -82,7 +82,7 @@
                   playSong(
                     item.id,
                     item.name,
-                    item.artists[0].name,
+                    item.ar[0].name,
                     item.album.blurPicUrl,
                     index
                   )
@@ -91,7 +91,7 @@
                 <div class="songindex">{{ index + 1 }}</div>
                 <div class="songInfo">
                   <div class="songName">{{ item.name }}</div>
-                  <div class="songartist c-hui">{{ item.artists[0].name }}</div>
+                  <div class="songartist c-hui">{{ item.ar[0].name }}</div>
                 </div>
                 <div class="songindex"><i class="fa fa-ellipsis-v"></i></div>
               </div>
@@ -171,6 +171,17 @@ export default {
       this.showToggle(1);
       // this.songList =[]
       // window.removeEventListener('scroll', this.handleScroll)
+    },
+    showToggle(e) {
+      console.log(this.showDetail + "   --!--");
+      this.showDetail = !this.showDetail;
+      if (this.showDetail) {
+        this.getData();
+      }
+      // if (this.detailWrapper) {
+      //   this.detailWrapper.scrollTo(0, 0);
+      //   console.log(this.detailWrapper);
+      // }
     },
   },
 };

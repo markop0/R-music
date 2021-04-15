@@ -97,6 +97,7 @@ Vue.prototype.openSongList = function (e) {
   this.songCont = e;
   this.$nextTick(() => {
     this.$refs.mySong.showToggle(0);
+
   });
 };
 // 打开播放页

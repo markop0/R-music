@@ -131,7 +131,7 @@
               >
                 <div class="flex">
                   {{ item.name }}
-                  <p class="art">{{ item.artists[0].name }}</p>
+                  <p class="art">{{ item.ar[0].name }}</p>
                 </div>
                 <i
                   class="delMusic flex el-icon-close"
@@ -345,7 +345,7 @@ export default {
         Artists = this.$store.state.playInfo.art;
         Bgurl = A[nextNum].al.picUrl;
       } else {
-        Artists = A[nextNum].artists[0].name;
+        Artists = A[nextNum].ar[0].name;
         Bgurl = A[nextNum].album.picUrl;
       }
       var songInfo = {
@@ -368,7 +368,7 @@ export default {
         Artists = this.$store.state.playInfo.art;
         Bgurl = A[nextNum].al.picUrl;
       } else {
-        Artists = A[nextNum].artists[0].name;
+        Artists = A[nextNum].ar[0].name;
         Bgurl = A[nextNum].album.picUrl;
       }
 

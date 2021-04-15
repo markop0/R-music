@@ -20,7 +20,7 @@
 							<div><i class="fa fa-play-circle-o"></i>播放全部<div class="c-hui">(共{{songList.length}}首)</div></div>
 							<div class="collection"><i class="el-icon-plus"></i>收藏</div>
 						</div>
-						<div class="song-list-box"> <!-- ,item.artists[0].name,item.album.blurPicUrl -->
+						<div class="song-list-box"> <!-- ,item.ar[0].name,item.album.blurPicUrl -->
 							<div class="cell-song" v-for="(item,index) of songList" :key="index" @click="playSong(item.id,item.name,artists.name,item.al.picUrl,index)">
 								<div class="songindex">{{index+1}}</div>
 								<div class="songInfo">

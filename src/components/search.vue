@@ -1,12 +1,22 @@
 <template>
   <transition id="search" name="fade" class="wrapper">
     <div class="search" v-show="showDetail">
-      <header class="topctrl" :style="{background:$store.state.zColor}">
+      <header class="topctrl" :style="{ background: $store.state.zColor }">
         <div class="back" @click="showToggle(1)">
           <i class="fa fa-angle-left fa-2x"></i>
         </div>
-        <input v-focus class="searchInput" v-model="searchWorld" placeholder="搜索歌曲、歌手" type="text">
-        <i class="el-icon-close back" @click="searchWorld=''" v-if="searchWorld!=''"></i>
+        <input
+          v-focus
+          class="searchInput"
+          v-model="searchWorld"
+          placeholder="搜索歌曲、歌手"
+          type="text"
+        />
+        <i
+          class="el-icon-close back"
+          @click="searchWorld = ''"
+          v-if="searchWorld != ''"
+        ></i>
       </header>
 
       <div class="resultsBox addTop" v-if="searchTip">
@@ -14,10 +24,12 @@
         <div class="hotSearchBox">
           <div
             class="cellHS"
-            v-for="(item,index) of hotList"
+            v-for="(item, index) of hotList"
             :key="index"
-            @click="searchWorld=item.first"
-          >{{item.first}}</div>
+            @click="searchWorld = item.first"
+          >
+            {{ item.first }}
+          </div>
         </div>
       </div>
       <div class="resultsBox" v-if="searchTip">
@@ -25,34 +37,44 @@
         <div class="hotSearchBox">
           <div
             class="cellHS"
-            v-for="(item,index) of searchHistory"
+            v-for="(item, index) of searchHistory"
             :key="index"
-            @click="searchWorld=item"
-          >{{item}}</div>
+            @click="searchWorld = item"
+          >
+            {{ item }}
+          </div>
         </div>
       </div>
       <div class="scrollBox" ref="page" v-if="searchList.length >= 1">
         <div class="SearchResultsBox">
-          <div class="SearchResults" v-for="(item,index) of searchList" :key="index" 
-            @click="playSong(item.id,item.name,item.artists[0].name,item.album.blurPicUrl)">
-            <div class="searchName">{{item.name}}</div>
-            <div>{{item.artists[0].name}}</div>
+          <div
+            class="SearchResults"
+            v-for="(item, index) of searchList"
+            :key="index"
+            @click="
+              playSong(
+                item.id,
+                item.name,
+                item.ar[0].name,
+                item.album.blurPicUrl
+              )
+            "
+          >
+            <div class="searchName">{{ item.name }}</div>
+            <div>{{ item.ar[0].name }}</div>
           </div>
         </div>
       </div>
-      
-      
     </div>
   </transition>
 </template>
 
 <script>
-import BScroll from '@better-scroll/core'
-
+import BScroll from "@better-scroll/core";
 
 const debounce = (func, wait) => {
   let timeout = "";
-  return v => {
+  return (v) => {
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -63,10 +85,10 @@ const debounce = (func, wait) => {
 };
 
 export default {
-  el: '#animated-number-demo',
+  el: "#animated-number-demo",
   mounted() {
-		console.log("search")
-	},
+    console.log("search");
+  },
   data() {
     return {
       hotList: [],
@@ -74,93 +96,89 @@ export default {
       searchList: [],
       showDetail: false,
       searchHistory: [],
-      searchTip:true,
+      searchTip: true,
       number: 0,
       tweenedNumber: 0,
-      dNumber:0
+      dNumber: 0,
     };
   },
   directives: {
     focus: {
       // 指令的定义
       inserted: function (el) {
-        el.focus()
-      }
-    }
+        el.focus();
+      },
+    },
   },
   computed: {
-    animatedNumber: function() {
+    animatedNumber: function () {
       return this.tweenedNumber.toFixed(0);
-    }
+    },
   },
   watch: {
-    searchWorld: function() {
+    searchWorld: function () {
       this.debounceSearch(this);
-      this.searchWorld===''?this.searchTip=true:''
+      this.searchWorld === "" ? (this.searchTip = true) : "";
     },
-    number:(newValue)=>{
+    number: (newValue) => {
       TweenLite.to(this.$data, 0.5, { tweenedNumber: newValue });
-    }
+    },
   },
   methods: {
-    getData: function() {
-      this.$axios.get( "/search/hot").then(re => {
-        var sHistory = localStorage.getItem('searchHistory');
-        sHistory==null?'':this.searchHistory = sHistory.split(',');
-        this.searchWorld=''
+    getData: function () {
+      this.$axios.get("/search/hot").then((re) => {
+        var sHistory = localStorage.getItem("searchHistory");
+        sHistory == null ? "" : (this.searchHistory = sHistory.split(","));
+        this.searchWorld = "";
         this.hotList = re.data.result.hots;
-
-        
       });
     },
     sollorder() {
       this.detailWrapper = new BScroll(this.$refs.page, {
-        click: true //开启点击事件 默认为false
+        click: true, //开启点击事件 默认为false
       });
     },
-    debounceSearch: debounce(function(e) {
+    debounceSearch: debounce(function (e) {
       if (e.searchWorld != "") {
         e.getHot();
       } else {
         e.searchList = [];
       }
     }, 1000),
-    getHot: function() {
-      this.$axios.get("/search?keywords=" + this.searchWorld)
-      .then(re => {
+    getHot: function () {
+      this.$axios.get("/search?keywords=" + this.searchWorld).then((re) => {
         this.searchList = re.data.result.songs;
-        this.searchTip=false
+        this.searchTip = false;
         this.$nextTick(() => {
           //$refs绑定元素
-					if(!this.scroll){
-						this.scroll = new BScroll(this.$refs.page, {
-						// click:true   //开启点击事件 默认为false
-					  })
-					}
-      })
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.page, {
+              // click:true   //开启点击事件 默认为false
+            });
+          }
+        });
       });
-      if(this.searchHistory.includes(this.searchWorld)){
-        var i = this.searchHistory.indexOf(this.searchWorld)
-        this.searchHistory.splice(i,1)
+      if (this.searchHistory.includes(this.searchWorld)) {
+        var i = this.searchHistory.indexOf(this.searchWorld);
+        this.searchHistory.splice(i, 1);
+      } else if (this.searchHistory.length >= 5) {
+        this.searchHistory.pop();
       }
-      else if(this.searchHistory.length>=5){
-        this.searchHistory.pop()
-      }
-      this.searchHistory.reverse()
+      this.searchHistory.reverse();
       this.searchHistory.push(this.searchWorld);
-      this.searchHistory.reverse()
-      localStorage.setItem('searchHistory',this.searchHistory)
-      
+      this.searchHistory.reverse();
+      localStorage.setItem("searchHistory", this.searchHistory);
     },
-    toText:()=>{
+    toText: () => {
       //n nnn nn nn
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.fade-enter-active,.fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: all 0.2s ease;
   transform: translate3d(0, 0, 0);
 }
@@ -221,8 +239,7 @@ export default {
   padding: 3px 10px;
   background: #f3f3f3;
 }
-.SearchResultsBox{
-
+.SearchResultsBox {
 }
 .SearchResults {
   border-bottom: 1px solid #e4e4e4;
@@ -240,12 +257,13 @@ export default {
   text-overflow: ellipsis;
   font-size: 16px;
 }
-.scrollBox{
+.scrollBox {
   width: 100vw;
   height: calc(100vh - 44px);
   margin-top: 44px;
   z-index: 80;
-
 }
-.addTop{margin-top: 44px;}
+.addTop {
+  margin-top: 44px;
+}
 </style>
