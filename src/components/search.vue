@@ -55,13 +55,13 @@
               playSong(
                 item.id,
                 item.name,
-                item.ar[0].name,
-                item.album.blurPicUrl
+                item.artists[0].name,
+                item.album.picId
               )
             "
           >
             <div class="searchName">{{ item.name }}</div>
-            <div>{{ item.ar[0].name }}</div>
+            <div>{{ item.artists[0].name }}</div>
           </div>
         </div>
       </div>

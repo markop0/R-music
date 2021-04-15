@@ -129,6 +129,7 @@ Vue.prototype.playSong = function (q, w, e, r, index) {
             .then(re => {
               if (re.data.code == 200) {
                 that.$store.state.playInfo.bgurl = re.data.songs[0].al.picUrl;
+                // that.$refs.playPage.playMusic()
               }
               this.$nextTick(() => {
                 console.log(JSON.stringify(this.$store.state.playInfo));

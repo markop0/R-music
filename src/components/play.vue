@@ -14,12 +14,12 @@
             <!-- <div class="lianyi" :class='cdCls'>
 							<div :class='ddCls'><div class="mini"></div></div>
 						</div> -->
-            <!-- <div class="lianyi ly2" :class='cdCls'>
-							<div :class='ddCls'><div class="mini m2"></div></div>
-						</div>
-						<div class="lianyi ly3" :class='cdCls'>
-							<div :class='ddCls'><div class="mini m3"></div></div>
-						</div> -->
+            <div class="lianyi ly2" :class="cdCls">
+              <div :class="ddCls"><div class="mini m2"></div></div>
+            </div>
+            <div class="lianyi ly3" :class="cdCls">
+              <div :class="ddCls"><div class="mini m3"></div></div>
+            </div>
             <div class="lianyi ly4" :class="cdCls">
               <div :class="ddCls"><div class="mini m4"></div></div>
             </div>
@@ -42,52 +42,72 @@
               </p>
             </div>
           </div>
+
+          <div class="miniCtrl">
+            <i
+              @click.stop="toggleLike()"
+              class="fa fa-heart-o BBbtn flex"
+              v-if="!isLike"
+            ></i>
+            <i
+              @click.stop="toggleLike()"
+              class="fa fa-heart BBbtn flex cRed"
+              v-if="isLike"
+            ></i>
+            <i
+              @click.stop="openComment()"
+              class="fa fa-commenting-o BBbtn flex"
+            ></i>
+          </div>
+        </div>
+        <div class="play_bottom_space">
           <div class="play-box">
             <div class="left">
               <div class="info">
                 <div class="size">{{ currentTime }}</div>
-                <el-slider
+                <!-- <el-slider
+                  :show-tooltip="false"
                   v-model="timeVal"
                   :max="maxTime"
                   :change="changeCurrentTime(timeVal)"
                   class="JDT"
-                ></el-slider>
+                ></el-slider> -->
+                <div class="m_slider">
+                  <div
+                    class="m_point"
+                    :style="{ left: (timeVal / maxTime) * 100 + '%' }"
+                  ></div>
+                  <div
+                    class="m_currentTime"
+                    :style="{
+                      width: (timeVal / maxTime) * 100 + '%',
+                      background: mColor,
+                    }"
+                  ></div>
+                </div>
                 <div class="timeshow">{{ duration }}</div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="miniCtrl">
-          <i
-            @click="toggleLike()"
-            class="fa fa-heart-o BBbtn flex"
-            v-if="!isLike"
-          ></i>
-          <i
-            @click="toggleLike()"
-            class="fa fa-heart BBbtn flex cRed"
-            v-if="isLike"
-          ></i>
-          <i @click="openComment()" class="fa fa-commenting-o BBbtn flex"></i>
-        </div>
-        <div class="ctrlbox">
-          <div class="loopBtn" @click="setPlay">
-            <div class="ctrlB loop" v-if="playSet == 0"></div>
-            <div class="ctrlB loop1" v-if="playSet == 1"></div>
-            <div class="ctrlB random" v-if="playSet == 2"></div>
-          </div>
-          <div class="beforeBtn" @click="PreSong">
-            <div class="ctrlB before"></div>
-          </div>
-          <div class="playBtn" @click="startPlayOrPause()">
-            <div class="ctrlB play" v-if="!playIcon"></div>
-            <div class="ctrlB stop" v-if="playIcon"></div>
-          </div>
-          <div class="nextBtn" @click="NextSong">
-            <div class="ctrlB next"></div>
-          </div>
-          <div class="listBtn" @click="miniMusicList = !miniMusicList">
-            <div class="ctrlB list"></div>
+          <div class="ctrlbox">
+            <div class="loopBtn" @click="setPlay">
+              <div class="ctrlB loop" v-if="playSet == 0"></div>
+              <div class="ctrlB loop1" v-if="playSet == 1"></div>
+              <div class="ctrlB random" v-if="playSet == 2"></div>
+            </div>
+            <div class="beforeBtn" @click="PreSong">
+              <div class="ctrlB before"></div>
+            </div>
+            <div class="playBtn" @click="startPlayOrPause()">
+              <div class="ctrlB play" v-if="!playIcon"></div>
+              <div class="ctrlB stop" v-if="playIcon"></div>
+            </div>
+            <div class="nextBtn" @click="NextSong">
+              <div class="ctrlB next"></div>
+            </div>
+            <div class="listBtn" @click="miniMusicList = !miniMusicList">
+              <div class="ctrlB list"></div>
+            </div>
           </div>
         </div>
         <div class="video">
@@ -152,7 +172,7 @@ import comment from "@/components/comment";
 export default {
   name: "play",
   mounted() {
-    // this.getData();
+    this.getData();
     this.yuanFX;
   },
   data() {
@@ -174,6 +194,8 @@ export default {
       playSet: 0,
       miniMusicList: false,
       xx1: 0,
+      lastTime: null,
+      mColor: "#a2cbd1", //音乐图片主题色
       // isEnd:this.$refs.audio.ended
     };
   },
@@ -181,21 +203,21 @@ export default {
     comment: comment,
   },
   watch: {
-    // timeVal() {
-    //   if (this.timeVal >= this.maxTime) {
-    //     if (this.playSet == 0 || this.playSet == 2) {
-    //       this.NextSong();
-    //       this.timeVal = 0;
-    //       console.log("下一首");
-    //     } else if (this.playSet == 1) {
-    //       this.timeVal = 0;
-    //       console.log("循环播放");
-    //       // this.$refs.audio.pause()
-    //       // this.playIcon=false
-    //     } else {
-    //     }
-    //   }
-    // }
+    timeVal() {
+      if (this.timeVal >= this.maxTime) {
+        if (this.playSet == 0 || this.playSet == 2) {
+          this.NextSong();
+          this.timeVal = 0;
+          console.log("下一首");
+        } else if (this.playSet == 1) {
+          this.timeVal = 0;
+          console.log("循环播放");
+          // this.$refs.audio.pause()
+          // this.playIcon=false
+        } else {
+        }
+      }
+    },
   },
   computed: {
     cdCls() {
@@ -206,6 +228,92 @@ export default {
     },
   },
   methods: {
+    getData() {
+      console.log("get data");
+      this.showDetail1 = !this.showDetail1;
+      this.musicInfo = JSON.parse(sessionStorage.getItem("playInfo"));
+      console.log(this.musicInfo);
+      console.log("session" + sessionStorage.getItem("playInfo"));
+
+      if (this.$store.state.playInfo.id !== "") {
+        this.getGeCi();
+      }
+    },
+    // 当音频播放
+    onPlay() {
+      this.playing = true;
+      this.$store.state.playing = true;
+      console.log(111);
+      this.getGeCi();
+    },
+    // 当音频暂停
+    onPause() {
+      this.playing = false;
+      this.$store.state.playing = false;
+    },
+    onEnded() {
+      console.log("播放结束");
+      this.$refs.audio.pause();
+    },
+    onAbort() {
+      console.log("onAbort");
+    },
+    // timeupdate事件大概每秒一次，更新音频流的当前播放时间
+    onTimeupdate(res) {
+      // this.timeVal = res.target.currentTime;
+      // this.currentTime = this.realFormatSecond(res.target.currentTime);
+      // Math.floor(this.timeVal);
+      // for (var i in this.geci) {
+      //   if (this.timeVal /*当前播放的时间*/ <= this.geci[i].time) {
+      //     //显示到页面
+      //     this.geciTime = this.geci[i - 1].time;
+      //     // this.scroll.scrollTo(0, -40*i, 300, ease['swipeBounce'])
+      //     return;
+      //   }
+      // }
+
+      let nowTime = Date.now();
+      let gapTime = 1000;
+      if (!this.lastTime || nowTime - this.lastTime > gapTime) {
+        if (this.$refs.audio) {
+          // console.log(res.target.currentTime);
+          this.timeVal = res.target.currentTime;
+          this.currentTime = this.realFormatSecond(res.target.currentTime);
+        }
+        this.lastTime = nowTime;
+      }
+    },
+    // 当加载语音流元数据完成后，会触发该事件的回调函数
+    // 语音元数据主要是语音的长度之类的数据
+    onLoadedmetadata(res) {
+      // console.log(res)
+      this.maxTime = parseInt(res.target.duration);
+      this.duration = this.realFormatSecond(this.maxTime);
+    },
+    // 改变播放节点
+    changeCurrentTime(e) {
+      if (this.$refs.audio) {
+        if (e !== this.$refs.audio.duration) {
+          let nowTime = Date.now();
+          let gapTime = 100;
+          console.log(nowTime - this.lastTime);
+          if (!this.lastTime || nowTime - this.lastTime > gapTime) {
+            if (Math.abs(e - this.$refs.audio.currentTime) > 1) {
+              this.pFn.debounce(this.setPlayPosition(e), 2000);
+              console.log(Math.abs(e - this.$refs.audio.currentTime));
+              console.log("setPlayPosition");
+            }
+          }
+        }
+      }
+    },
+    //音频节点跳转
+    setPlayPosition(e) {
+      if (this.$refs.audio) {
+        this.$refs.audio.currentTime = e;
+      }
+    },
+    //播放模式
     setPlay() {
       switch (this.playSet) {
         case 0:
@@ -249,45 +357,6 @@ export default {
     delMusic(e) {
       this.$store.state.songList.splice(e, 1);
     },
-    getData() {
-      console.log("get data");
-      this.showDetail1 = !this.showDetail1;
-      this.musicInfo = JSON.parse(sessionStorage.getItem("playInfo"));
-      console.log(this.musicInfo);
-      console.log("session" + sessionStorage.getItem("playInfo"));
-
-      if (this.$store.state.playInfo.id !== "") {
-        // 获取歌词
-        this.$axios
-          .get("/lyric?id=" + this.$store.state.playInfo.id)
-          .then((re) => {
-            console.log("歌词");
-            var geci = [];
-            if (re.data.lrc !== undefined) {
-              var gc = re.data.lrc.lyric;
-              var gcArr = gc.split("[");
-              for (var i in gcArr) {
-                var now = gcArr[i].split("]");
-                var nt = now[0].split(":"); //nowTime
-
-                var rowGC = { time: nt[0] * 60 + Number(nt[1]), txt: now[1] };
-                geci.push(rowGC);
-              }
-              this.geci = geci;
-            } else {
-              this.geci = ["暂无歌词"];
-            }
-
-            this.$nextTick(() => {
-              //$refs绑定元素
-              if (!this.scroll) {
-                this.scroll = new BScroll(this.$refs.playbox);
-              }
-            });
-          });
-        // this.btScroll();
-      }
-    },
     toggleLike() {
       this.$axios
         .get(
@@ -309,10 +378,8 @@ export default {
     // 控制音频的播放与暂停
     startPlayOrPause() {
       this.playIcon ? this.pause() : this.play();
-
       this.playIcon = !this.playIcon;
     },
-
     offPlay() {
       this.showToggle();
     },
@@ -324,17 +391,7 @@ export default {
     pause() {
       this.$refs.audio.pause();
     },
-    // 当音频播放
-    onPlay() {
-      this.playing = true;
-      this.$store.state.playing = true;
-      console.log(111);
-    },
-    // 当音频暂停
-    onPause() {
-      this.playing = false;
-      this.$store.state.playing = false;
-    },
+    // 切上一首个
     PreSong() {
       // let nowPlayId=this.$store.state.playInfo.id
       let nextNum = this.$store.state.playInfo.index;
@@ -358,6 +415,7 @@ export default {
       this.$store.state.playInfo = songInfo;
       this.getMusicUrl();
     },
+    // 切下一首歌
     NextSong() {
       // let nowPlayId=this.$store.state.playInfo.id
       let nextNum = this.$store.state.playInfo.index;
@@ -382,8 +440,8 @@ export default {
       this.$store.state.playInfo = songInfo;
       this.getMusicUrl();
     },
+    // 获取歌曲链接
     getMusicUrl() {
-      // 获取歌曲链接
       this.$axios
         .get("/music/url?id=" + this.$store.state.playInfo.id)
         .then((re) => {
@@ -391,14 +449,7 @@ export default {
             ? ""
             : (this.$store.state.audio = re.data.data[0].url);
         });
-      // this.getData();
-    },
-    onEnded() {
-      console.log("播放结束");
-      this.$refs.audio.pause();
-    },
-    onAbort() {
-      console.log("onAbort");
+      this.getData();
     },
     //时间格式转换
     realFormatSecond(second) {
@@ -417,42 +468,36 @@ export default {
         return "0:00:00";
       }
     },
-    // timeupdate事件大概每秒一次，更新音频流的当前播放时间
-    onTimeupdate(res) {
-      // console.log(res);
-      this.timeVal = res.target.currentTime;
-      this.currentTime = this.realFormatSecond(res.target.currentTime);
-      Math.floor(this.timeVal);
-      for (var i in this.geci) {
-        if (this.timeVal /*当前播放的时间*/ <= this.geci[i].time) {
-          //显示到页面
-          this.geciTime = this.geci[i - 1].time;
-          // this.scroll.scrollTo(0, -40*i, 300, ease['swipeBounce'])
-          return;
-        }
-      }
-    },
-    // 当加载语音流元数据完成后，会触发该事件的回调函数
-    // 语音元数据主要是语音的长度之类的数据
-    onLoadedmetadata(res) {
-      // console.log(res)
-      this.maxTime = parseInt(res.target.duration);
-      this.duration = this.realFormatSecond(this.maxTime);
-    },
+    // 获取歌词
+    getGeCi() {
+      this.$axios
+        .get("/lyric?id=" + this.$store.state.playInfo.id)
+        .then((re) => {
+          console.log("歌词");
+          var geci = [];
+          if (re.data.lrc !== undefined) {
+            var gc = re.data.lrc.lyric;
+            var gcArr = gc.split("[");
+            for (var i in gcArr) {
+              var now = gcArr[i].split("]");
+              var nt = now[0].split(":"); //nowTime
 
-    changeCurrentTime(e) {
-      console.log(this.$refs.audio);
-      // if(e!==this.$refs.audio.currentTime){
-      //   this.pFn.debounce(this.setPlayPosition(e), 2000);
-      //   console.log(e-this.$refs.audio.currentTime);
-      // }
-      
-    },
-    //音频节点跳转
-    setPlayPosition(e) {
-      if (this.$refs.audio) {
-        this.$refs.audio.currentTime = e;
-      }
+              var rowGC = { time: nt[0] * 60 + Number(nt[1]), txt: now[1] };
+              geci.push(rowGC);
+            }
+            this.geci = geci;
+          } else {
+            this.geci = ["暂无歌词"];
+          }
+
+          this.$nextTick(() => {
+            //$refs绑定元素
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.playbox);
+            }
+          });
+        });
+      // this.btScroll();
     },
   },
 };
@@ -538,7 +583,8 @@ audio {
   color: #fff;
 }
 .playInfo {
-  height: 132vw;
+  height: calc(100% - 150px);
+  position: relative;
 }
 .palymask {
   z-index: 910;
@@ -593,6 +639,7 @@ audio {
   height: 122vw;
   border-radius: 50%;
   margin: auto;
+  padding-top: 14vw;
 }
 .imgbox img {
   background: #fffcf5;
@@ -617,9 +664,15 @@ audio {
     -webkit-transform: rotate(360deg);
   }
 }
+.play_bottom_space {
+  width: 100vw;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
 .ctrlbox {
   height: auto;
-  padding: 10px 10px 20px 10px;
+  padding: 10px 0 20px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -760,7 +813,28 @@ audio {
 .JDT .el-slider__runway {
   margin: 6px 0 !important;
 }
+.m_slider {
+  width: 100%;
+  height: 2px;
+  background: #898584;
+  margin: 12px;
+  border-radius: 10px;
+  position: relative;
+}
+.m_point {
+  width: 6px;
+  height: 6px;
+  border-radius: 50px;
+  position: absolute;
+  top: -2px;
+  background: #fff;
+}
+.m_currentTime {
+  height: 100%;
+  border-radius: 10px;
+}
 .miniCtrl {
+  width: 100%;
   height: 44px;
   padding: 0;
   text-align: center;
@@ -768,6 +842,11 @@ audio {
   justify-content: center;
   align-items: center;
   color: #fff;
+  bottom: 0;
+  position: absolute;
+}
+.BBbtn {
+  padding: 14px;
 }
 .geci {
   width: 100%;

@@ -83,7 +83,7 @@
                     item.id,
                     item.name,
                     item.ar[0].name,
-                    item.album.blurPicUrl,
+                    item.al.picUrl,
                     index
                   )
                 "
@@ -169,19 +169,8 @@ export default {
     // 退出歌单
     musiclistToggle: function () {
       this.showToggle(1);
-      // this.songList =[]
+      this.songList = [];
       // window.removeEventListener('scroll', this.handleScroll)
-    },
-    showToggle(e) {
-      console.log(this.showDetail + "   --!--");
-      this.showDetail = !this.showDetail;
-      if (this.showDetail) {
-        this.getData();
-      }
-      // if (this.detailWrapper) {
-      //   this.detailWrapper.scrollTo(0, 0);
-      //   console.log(this.detailWrapper);
-      // }
     },
   },
 };
