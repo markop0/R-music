@@ -14,6 +14,9 @@ table{border-spacing:0}
 html{
     
 }
+.team_name{
+    padding: 6px 10px;
+}
 .ebtn{
     display: inline-block;
     line-height: 1;
