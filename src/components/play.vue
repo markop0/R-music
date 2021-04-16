@@ -72,18 +72,26 @@
                   :change="changeCurrentTime(timeVal)"
                   class="JDT"
                 ></el-slider> -->
-                <div class="m_slider">
-                  <div
-                    class="m_point"
-                    :style="{ left: (timeVal / maxTime) * 100 + '%' }"
-                  ></div>
-                  <div
-                    class="m_currentTime"
-                    :style="{
-                      width: (timeVal / maxTime) * 100 + '%',
-                      background: mColor,
-                    }"
-                  ></div>
+                <div
+                  class="m_touch"
+                  @touchstart.stop="touchstart"
+                  @touchmove.stop="touchmove"
+                  @touchend.stop="touchend"
+                  ref="mtBox"
+                >
+                  <div class="m_slider" ref="mtLine">
+                    <div
+                      class="m_point"
+                      :style="{ left: (timeVal / maxTime) * 100 + '%' }"
+                    ></div>
+                    <div
+                      class="m_currentTime"
+                      :style="{
+                        width: (timeVal / maxTime) * 100 + '%',
+                        background: mColor,
+                      }"
+                    ></div>
+                  </div>
                 </div>
                 <div class="timeshow">{{ duration }}</div>
               </div>
@@ -169,12 +177,14 @@
 <script>
 import BScroll from "@better-scroll/core";
 import comment from "@/components/comment";
+let wid = window;
+let wWidth = wid.outerWidth;
+let wHight = wid.outerHeight;
+let ox, oy, dx, dy, re0, re1;
+
 export default {
   name: "play",
-  mounted() {
-    this.getData();
-    this.yuanFX;
-  },
+
   data() {
     return {
       currentTime: "00:00", // 音频当前播放时长
@@ -196,6 +206,10 @@ export default {
       xx1: 0,
       lastTime: null,
       mColor: "#a2cbd1", //音乐图片主题色
+      wWidth: null,
+      wHight: null,
+      tStart: {},
+      tEnd: {},
       // isEnd:this.$refs.audio.ended
     };
   },
@@ -227,7 +241,21 @@ export default {
       return this.playing ? "dian" : "dian pause";
     },
   },
+  mounted() {
+    this.getData();
+    this.yuanFX;
+  },
   methods: {
+    getSpaceData() {
+      let mb = this.$refs.mtBox;
+      let ml = this.$refs.mtLine;
+      ox = mb.offsetLeft;
+      oy = wHight - mb.offsetParent.clientHeight;
+      dx = ox + mb.offsetWidth;
+      dy = oy + mb.offsetHeight;
+      re0 = ml.offsetLeft;
+      re1 = re0 + ml.clientWidth;
+    },
     getData() {
       console.log("get data");
       this.showDetail1 = !this.showDetail1;
@@ -238,6 +266,9 @@ export default {
       if (this.$store.state.playInfo.id !== "") {
         this.getGeCi();
       }
+      // let wid = window;
+      // this.wWidth = wid.outerWidth;
+      // this.wHight = wid.outerHeight;
     },
     // 当音频播放
     onPlay() {
@@ -291,6 +322,58 @@ export default {
       this.duration = this.realFormatSecond(this.maxTime);
     },
     // 改变播放节点
+    touchstart(e) {
+      this.getSpaceData();
+      let obj = e.changedTouches[0];
+      // console.log(obj);
+      this.tStart = { x: obj.clientX, y: obj.clientY };
+      if (obj.clientX <= re0) {
+        this.setPlayPosition(0);
+      } else if (obj.clientX >= re1) {
+        this.setPlayPosition(99);
+      } else {
+        console.log((obj.clientX - re0) / (re1 - re0));
+        this.setPlayPosition(
+          ((obj.clientX - re0) / (re1 - re0)) * this.maxTime
+        );
+      }
+    },
+    touchmove(e) {
+      let obj = e.changedTouches[0];
+      if (this.tStart.x == obj.clientX && this.tStart.y == obj.clientY) {
+        //单点跳转
+        if (obj.clientX <= re0) {
+          this.setPlayPosition(0);
+        } else if (obj.clientX >= re1) {
+          this.setPlayPosition(99);
+        } else {
+          console.log((obj.clientX - re0) / (re1 - re0));
+          this.setPlayPosition(
+            ((obj.clientX - re0) / (re1 - re0)) * this.maxTime
+          );
+        }
+      } else {
+      }
+    },
+    touchend(e) {
+      let obj = e.changedTouches[0];
+      console.log(obj);
+      this.tEnd = { x: obj.clientX, y: obj.clientY };
+      if (this.tStart.x == obj.clientX && this.tStart.y == obj.clientY) {
+        //单点跳转
+        if (obj.clientX <= re0) {
+          this.setPlayPosition(0);
+        } else if (obj.clientX >= re1) {
+          this.setPlayPosition(99);
+        } else {
+          console.log((obj.clientX - re0) / (re1 - re0));
+          this.setPlayPosition(
+            ((obj.clientX - re0) / (re1 - re0)) * this.maxTime
+          );
+        }
+      } else {
+      }
+    },
     changeCurrentTime(e) {
       if (this.$refs.audio) {
         if (e !== this.$refs.audio.duration) {
@@ -813,8 +896,12 @@ audio {
 .JDT .el-slider__runway {
   margin: 6px 0 !important;
 }
-.m_slider {
+.m_touch {
   width: 100%;
+  background: #3c3c3c;
+}
+.m_slider {
+  width: calc(100% - 24px);
   height: 2px;
   background: #898584;
   margin: 12px;
@@ -827,6 +914,7 @@ audio {
   border-radius: 50px;
   position: absolute;
   top: -2px;
+  margin-left: -2px;
   background: #fff;
 }
 .m_currentTime {
@@ -842,7 +930,7 @@ audio {
   justify-content: center;
   align-items: center;
   color: #fff;
-  bottom: 0;
+  bottom: 10px;
   position: absolute;
 }
 .BBbtn {
