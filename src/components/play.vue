@@ -666,7 +666,7 @@ audio {
   color: #fff;
 }
 .playInfo {
-  height: calc(100% - 150px);
+  height: calc(100% - 194px);
   position: relative;
 }
 .palymask {
@@ -689,7 +689,7 @@ audio {
   top: 0%;
 }
 .MBox {
-  background: #f2f3f4;
+  background: #808080;
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -930,7 +930,7 @@ audio {
   justify-content: center;
   align-items: center;
   color: #fff;
-  bottom: 10px;
+  bottom: -44px;
   position: absolute;
 }
 .BBbtn {
