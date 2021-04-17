@@ -47,6 +47,7 @@ export default {
       console.log("playMusic");
       //   e == 1 ? "" : this.$store.commit("togglePlay");
       this.playEvent = !this.playEvent;
+      // this.$refs.playPage.getSpaceData()
     },
     playCtrl() {
       this.$refs.playPage.startPlayOrPause();

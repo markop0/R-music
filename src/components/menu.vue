@@ -18,7 +18,7 @@
             <div class="us-ctrl">
               <div class="us-name">{{ userInfo.nickname }}</div>
               <div>{{ userInfo.name }}</div>
-              <el-button size="mini" round>签到</el-button>
+              <el-button size="mini" @click="Login(1)" round>登入</el-button>
             </div>
           </div>
           <div>
@@ -90,6 +90,7 @@ export default {
     },
     getData() {
       this.userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      this.userInfo = {}
       this.userInfo == null ? (this.login = true) : (this.login = false);
       this.btScroll();
     },

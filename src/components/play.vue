@@ -9,7 +9,7 @@
           <div class="r-title">{{ $store.state.playInfo.name }}</div>
           <div class="r-art">{{ $store.state.playInfo.art }}</div>
         </div>
-        <div class="playInfo" @click="getGeci()">
+        <div class="playInfo" @click="changeShowTab()">
           <div class="imgbox flex" v-show="AorB">
             <!-- <div class="lianyi" :class='cdCls'>
 							<div :class='ddCls'><div class="mini"></div></div>
@@ -44,7 +44,7 @@
           </div>
 
           <div class="miniCtrl">
-            <i
+            <!-- <i
               @click.stop="toggleLike()"
               class="fa fa-heart-o BBbtn flex"
               v-if="!isLike"
@@ -57,7 +57,35 @@
             <i
               @click.stop="openComment()"
               class="fa fa-commenting-o BBbtn flex"
-            ></i>
+            ></i> -->
+            <div
+              class="m_touch"
+              @touchstart.stop="touchstart"
+              @touchmove.stop="touchmove"
+              @touchend.stop="touchend"
+              ref="mtBox"
+            >
+              <!-- <div class="m_slider" ref="mtLine">
+                <div
+                  class="m_point"
+                  :style="{ left: (timeVal / maxTime) * 100 + '%' }"
+                ></div>
+                <div
+                  class="m_currentTime"
+                  :style="{
+                    width: (timeVal / maxTime) * 100 + '%',
+                    background: mColor,
+                  }"
+                ></div>
+              </div> -->
+              <!-- <el-slider
+                  :show-tooltip="false"
+                  v-model="timeVal"
+                  :max="maxTime"
+                  :change="changeCurrentTime(timeVal)"
+                  class="JDT"
+                ></el-slider> -->
+            </div>
           </div>
         </div>
         <div class="play_bottom_space">
@@ -72,6 +100,7 @@
                   :change="changeCurrentTime(timeVal)"
                   class="JDT"
                 ></el-slider> -->
+
                 <div
                   class="m_touch"
                   @touchstart.stop="touchstart"
@@ -98,23 +127,31 @@
             </div>
           </div>
           <div class="ctrlbox">
-            <div class="loopBtn" @click="setPlay">
-              <div class="ctrlB loop" v-if="playSet == 0"></div>
+            <div class="loopBtn flex_cc" @click="setPlay">
+              <!-- <div class="ctrlB loop" v-if="playSet == 0"></div>
               <div class="ctrlB loop1" v-if="playSet == 1"></div>
-              <div class="ctrlB random" v-if="playSet == 2"></div>
+              <div class="ctrlB random" v-if="playSet == 2"></div> -->
+              <img src="../assets/img/loop.png" v-if="playSet == 0"/>
+              <img src="../assets/img/loop1.png" v-if="playSet == 1"/>
+              <img src="../assets/img/random.png" v-if="playSet == 2"/>
             </div>
-            <div class="beforeBtn" @click="PreSong">
-              <div class="ctrlB before"></div>
+            <div class="beforeBtn flex_cc" @click="PreSong">
+              <!-- <div class="ctrlB before"></div> -->
+              <img src="../assets/img/before.png" />
             </div>
-            <div class="playBtn" @click="startPlayOrPause()">
-              <div class="ctrlB play" v-if="!playIcon"></div>
-              <div class="ctrlB stop" v-if="playIcon"></div>
+            <div class="playBtn flex_cc" @click="startPlayOrPause()">
+              <!-- <div class="ctrlB play" v-if="!playIcon"></div>
+              <div class="ctrlB stop" v-if="playIcon"></div> -->
+              <img v-if="!playIcon" src="../assets/img/play1.png" />
+              <img v-else src="../assets/img/stop1.png" />
             </div>
-            <div class="nextBtn" @click="NextSong">
-              <div class="ctrlB next"></div>
+            <div class="nextBtn flex_cc" @click="NextSong">
+              <!-- <div class="ctrlB next"></div> -->
+              <img src="../assets/img/next.png" />
             </div>
-            <div class="listBtn" @click="miniMusicList = !miniMusicList">
-              <div class="ctrlB list"></div>
+            <div class="listBtn flex_cc" @click="miniMusicList = !miniMusicList">
+              <!-- <div class="ctrlB list"></div> -->
+              <img src="../assets/img/list.png" />
             </div>
           </div>
         </div>
@@ -210,28 +247,12 @@ export default {
       wHight: null,
       tStart: {},
       tEnd: {},
+      userCtrl: false,
       // isEnd:this.$refs.audio.ended
     };
   },
   components: {
     comment: comment,
-  },
-  watch: {
-    timeVal() {
-      if (this.timeVal >= this.maxTime) {
-        if (this.playSet == 0 || this.playSet == 2) {
-          this.NextSong();
-          this.timeVal = 0;
-          console.log("下一首");
-        } else if (this.playSet == 1) {
-          this.timeVal = 0;
-          console.log("循环播放");
-          // this.$refs.audio.pause()
-          // this.playIcon=false
-        } else {
-        }
-      }
-    },
   },
   computed: {
     cdCls() {
@@ -243,10 +264,12 @@ export default {
   },
   mounted() {
     this.getData();
-    this.yuanFX;
+    console.log(this.yuanFX);
+    this.getSpaceData();
   },
   methods: {
     getSpaceData() {
+      let oppo = this.$refs.mtBox.getBoundingClientRect();
       let mb = this.$refs.mtBox;
       let ml = this.$refs.mtLine;
       ox = mb.offsetLeft;
@@ -257,24 +280,18 @@ export default {
       re1 = re0 + ml.clientWidth;
     },
     getData() {
-      console.log("get data");
       this.showDetail1 = !this.showDetail1;
       this.musicInfo = JSON.parse(sessionStorage.getItem("playInfo"));
       console.log(this.musicInfo);
-      console.log("session" + sessionStorage.getItem("playInfo"));
 
       if (this.$store.state.playInfo.id !== "") {
         this.getGeCi();
       }
-      // let wid = window;
-      // this.wWidth = wid.outerWidth;
-      // this.wHight = wid.outerHeight;
     },
     // 当音频播放
     onPlay() {
       this.playing = true;
       this.$store.state.playing = true;
-      console.log(111);
       this.getGeCi();
     },
     // 当音频暂停
@@ -282,109 +299,107 @@ export default {
       this.playing = false;
       this.$store.state.playing = false;
     },
+    //当播放结束
     onEnded() {
-      console.log("播放结束");
       this.$refs.audio.pause();
+      if (this.playSet == 0 || this.playSet == 2) {
+        this.NextSong();
+        this.timeVal = 0;
+        console.log("下一首");
+      } else if (this.playSet == 1) {
+        this.timeVal = 0;
+        console.log("循环播放");
+        // this.$refs.audio.pause()
+        // this.playIcon=false
+      } else {
+      }
     },
     onAbort() {
-      console.log("onAbort");
+      // console.log("onAbort");
     },
     // timeupdate事件大概每秒一次，更新音频流的当前播放时间
     onTimeupdate(res) {
-      // this.timeVal = res.target.currentTime;
-      // this.currentTime = this.realFormatSecond(res.target.currentTime);
-      // Math.floor(this.timeVal);
-      // for (var i in this.geci) {
-      //   if (this.timeVal /*当前播放的时间*/ <= this.geci[i].time) {
-      //     //显示到页面
-      //     this.geciTime = this.geci[i - 1].time;
-      //     // this.scroll.scrollTo(0, -40*i, 300, ease['swipeBounce'])
-      //     return;
-      //   }
-      // }
-
       let nowTime = Date.now();
       let gapTime = 1000;
       if (!this.lastTime || nowTime - this.lastTime > gapTime) {
-        if (this.$refs.audio) {
+        if (!this.userCtrl) {
           // console.log(res.target.currentTime);
           this.timeVal = res.target.currentTime;
           this.currentTime = this.realFormatSecond(res.target.currentTime);
+          this.lyricPositionJump();
         }
         this.lastTime = nowTime;
       }
     },
+
     // 当加载语音流元数据完成后，会触发该事件的回调函数
     // 语音元数据主要是语音的长度之类的数据
     onLoadedmetadata(res) {
-      // console.log(res)
       this.maxTime = parseInt(res.target.duration);
       this.duration = this.realFormatSecond(this.maxTime);
     },
     // 改变播放节点
     touchstart(e) {
+      this.userCtrl = true;
       this.getSpaceData();
       let obj = e.changedTouches[0];
-      // console.log(obj);
       this.tStart = { x: obj.clientX, y: obj.clientY };
+      if (obj.clientX <= re0) {
+        this.timeVal = 0;
+        this.currentTime = this.realFormatSecond(0);
+      } else if (obj.clientX >= re1) {
+        this.timeVal = this.maxTime;
+        this.currentTime = this.duration; //this.realFormatSecond(this.maxTime)
+      } else {
+        let pSeconds = ((obj.clientX - re0) / (re1 - re0)) * this.maxTime; //当前触摸位置对应秒数
+        this.timeVal = pSeconds;
+        this.currentTime = this.realFormatSecond(pSeconds);
+      }
+    },
+    touchmove(e) {
+      let obj = e.changedTouches[0];
+      if (obj.clientX <= re0) {
+        this.timeVal = 0;
+        this.currentTime = this.realFormatSecond(0);
+      } else if (obj.clientX >= re1) {
+        this.timeVal = this.maxTime;
+        this.currentTime = this.duration; //this.realFormatSecond(this.maxTime)
+      } else {
+        let pSeconds = ((obj.clientX - re0) / (re1 - re0)) * this.maxTime; //当前触摸位置对应秒数
+        this.timeVal = pSeconds;
+        this.currentTime = this.realFormatSecond(pSeconds);
+      }
+    },
+    touchend(e) {
+      let obj = e.changedTouches[0];
+      this.tEnd = { x: obj.clientX, y: obj.clientY };
+      // if (this.tStart.x == obj.clientX && this.tStart.y == obj.clientY) {
+      //单点跳转
       if (obj.clientX <= re0) {
         this.setPlayPosition(0);
       } else if (obj.clientX >= re1) {
         this.setPlayPosition(99);
       } else {
-        console.log((obj.clientX - re0) / (re1 - re0));
+        // console.log((obj.clientX - re0) / (re1 - re0));
         this.setPlayPosition(
           ((obj.clientX - re0) / (re1 - re0)) * this.maxTime
         );
       }
-    },
-    touchmove(e) {
-      let obj = e.changedTouches[0];
-      if (this.tStart.x == obj.clientX && this.tStart.y == obj.clientY) {
-        //单点跳转
-        if (obj.clientX <= re0) {
-          this.setPlayPosition(0);
-        } else if (obj.clientX >= re1) {
-          this.setPlayPosition(99);
-        } else {
-          console.log((obj.clientX - re0) / (re1 - re0));
-          this.setPlayPosition(
-            ((obj.clientX - re0) / (re1 - re0)) * this.maxTime
-          );
-        }
-      } else {
-      }
-    },
-    touchend(e) {
-      let obj = e.changedTouches[0];
-      console.log(obj);
-      this.tEnd = { x: obj.clientX, y: obj.clientY };
-      if (this.tStart.x == obj.clientX && this.tStart.y == obj.clientY) {
-        //单点跳转
-        if (obj.clientX <= re0) {
-          this.setPlayPosition(0);
-        } else if (obj.clientX >= re1) {
-          this.setPlayPosition(99);
-        } else {
-          console.log((obj.clientX - re0) / (re1 - re0));
-          this.setPlayPosition(
-            ((obj.clientX - re0) / (re1 - re0)) * this.maxTime
-          );
-        }
-      } else {
-      }
+      // } else {
+      // }
+      this.userCtrl = false; //解除用户控制，恢复音乐跳秒
     },
     changeCurrentTime(e) {
       if (this.$refs.audio) {
         if (e !== this.$refs.audio.duration) {
           let nowTime = Date.now();
           let gapTime = 100;
-          console.log(nowTime - this.lastTime);
+          // console.log(nowTime - this.lastTime);
           if (!this.lastTime || nowTime - this.lastTime > gapTime) {
             if (Math.abs(e - this.$refs.audio.currentTime) > 1) {
               this.pFn.debounce(this.setPlayPosition(e), 2000);
-              console.log(Math.abs(e - this.$refs.audio.currentTime));
-              console.log("setPlayPosition");
+              // console.log(Math.abs(e - this.$refs.audio.currentTime));
+              // console.log("setPlayPosition");
             }
           }
         }
@@ -450,8 +465,9 @@ export default {
           this.isLike = !this.isLike;
         });
     },
-    getGeci() {
-      this.AorB = !this.AorB;
+    //切换 歌词/CD图
+    changeShowTab() {
+      // this.AorB = !this.AorB;
     },
     sollorder() {
       this.detailWrapper = new BScroll(this.$refs.geciBox, {
@@ -582,6 +598,18 @@ export default {
         });
       // this.btScroll();
     },
+    //歌词位置跳转
+    lyricPositionJump() {
+      Math.floor(this.timeVal);
+      for (var i in this.geci) {
+        if (this.timeVal /*当前播放的时间*/ <= this.geci[i].time) {
+          //显示到页面
+          this.geciTime = this.geci[i - 1].time;
+          // this.scroll.scrollTo(0, -40*i, 300, ease['swipeBounce'])
+          return;
+        }
+      }
+    },
   },
 };
 export const ease = {
@@ -630,11 +658,7 @@ audio {
 .cRed {
   color: #ffb5b0;
 }
-.ctrlB {
-  background: #ffb5b0;
-  width: 48px;
-  height: 48px;
-}
+
 .list {
   -webkit-mask-image: url(../assets/img/list.png);
 }
@@ -642,10 +666,10 @@ audio {
   -webkit-mask-image: url(../assets/img/before.png);
 }
 .play {
-  -webkit-mask-image: url(../assets/img/play.png);
+  -webkit-mask-image: url(../assets/img/play1.png);
 }
 .stop {
-  -webkit-mask-image: url(../assets/img/stop.png);
+  -webkit-mask-image: url(../assets/img/stop1.png);
 }
 .next {
   -webkit-mask-image: url(../assets/img/next.png);
@@ -773,7 +797,9 @@ audio {
 .playBtn {
   width: 48px !important;
   height: 48px;
-  margin: 1px 10%;
+  margin: 1px 7.6vw;
+  border: 1px solid #fff;
+  border-radius: 50px;
 }
 .nextBtn {
   width: 40px;
@@ -787,8 +813,8 @@ audio {
 }
 /*.stopBtn{background-image:url(../img/stop.png);}*/
 .ctrlbox div img {
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
 }
 .play-box .left {
   width: 100%;
@@ -898,7 +924,7 @@ audio {
 }
 .m_touch {
   width: 100%;
-  background: #3c3c3c;
+  /* background: #3c3c3c; */
 }
 .m_slider {
   width: calc(100% - 24px);
@@ -1016,6 +1042,8 @@ audio {
   height: 270px !important;
   animation-delay: 1.2s;
   -webkit-animation-delay: 1.2s; /* Safari 和 Chrome */
+  transform:rotate(33deg);
+  -webkit-transform:rotate(33deg); /* Safari 和 Chrome */
 }
 .ly3 {
   width: 270px !important;
@@ -1073,6 +1101,7 @@ audio {
     -webkit-transform: scale(1, 1); /* Safari */
     transform: scale(1, 1); /* 标准语法 */
     opacity: 1;
+    
   }
 
   100% {
@@ -1080,6 +1109,7 @@ audio {
     -webkit-transform: scale(1.5, 1.5); /* Safari */
     transform: scale(1.5, 1.5); /* 标准语法 */
     opacity: 0;
+    animation: rotate 20s linear infinite;
   }
 }
 
