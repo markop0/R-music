@@ -1,5 +1,5 @@
 <template>
-  <div id="Mbox" class="wrapper">
+  <div id="Mbox" class="wrapper" :style="{ background: $store.state.zColor }">
     <div class="recommend_content" ref="Mbox">
       <div class="recommend-cont">
         <div class="hoom1box">
@@ -200,6 +200,7 @@ export default {
 .m-body {
   display: flex;
   flex-wrap: wrap;
+  background: #fff;
 }
 .m-title {
   width: 40%;
@@ -239,6 +240,7 @@ export default {
 .hoom1box {
   position: relative;
   min-height: 130px;
+  background: #fff;
 }
 .swiperBg {
   width: 100%;

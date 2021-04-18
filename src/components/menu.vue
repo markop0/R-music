@@ -66,7 +66,11 @@ export default {
     return {
       Menu: false,
       // mask:false,
-      userInfo: [],
+      userInfo: {
+        nickname:'Avery',
+        avatarUrl:'https://avatars.githubusercontent.com/u/25838726?v=4',
+        backgroundUrl:'../assets/img/menuBg.jpg'
+      },
       login: "",
       menuList: [
         { name: "我的消息", icon: "fa-envelope-open-o" },
@@ -79,8 +83,8 @@ export default {
         { name: "听歌识曲", icon: "fa-microphone" },
         { name: "主题设置", icon: "fa-paint-brush" }
       ],
-      cBox: ["#ff3e34", "#ffb5b0", "#49c6ff", "#7cdfc7", "#f8e089", "#ffb13f"],
-      showDetail: false
+      cBox: ["#ff3e34", "#ff91b0", "#109d58", "#7cdfc7", "#1678ff", "#ff9700"],
+      showDetail: false,
     };
   },
   methods: {

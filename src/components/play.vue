@@ -770,6 +770,9 @@ export const ease = {
   justify-content: center;
   align-items: center;
 }
+.ctrlbox>div:active{
+  filter: drop-shadow(0px 0px 2px #fff );
+}
 .listBtn {
   width: 40px;
   height: 40px;
@@ -795,11 +798,11 @@ export const ease = {
   z-index: -1;
   border-radius: 50px;
 }
-.playBtn:active {
+/* .playBtn:active {
   box-shadow: 0 0 9px white;
-}
+} */
 .playBtn:active.playBtn::before {
-  box-shadow: inset 0 0 9px white;
+  box-shadow: inset 0 0 6px white;
 }
 .nextBtn {
   width: 40px;
@@ -999,37 +1002,37 @@ export const ease = {
 
 .mini {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   background: #e5efea;
   border-radius: 50%;
-  top: -5px;
+  top: -4px;
   left: 130px;
 }
 .m2 {
   top: 130px;
-  left: 267px;
+  left: 258px;
 }
 .m3 {
-  top: 267px;
+  top: 2258px;
   left: 130px;
 }
 .m4 {
   top: 130px;
-  left: -5px;
+  left: -4px;
 }
 
 .dian {
   position: absolute;
-  width: 270px;
-  height: 270px;
+  width: 260px;
+  height: 260px;
   animation: dAnimation 4.6s;
   -webkit-animation: dAnimation 4.6s infinite linear;
   animation: rotate 18s linear infinite;
 }
 .lianyi {
-  width: 270px;
-  height: 270px;
+  width: 260px;
+  height: 260px;
   border: 2px solid #e5efea;
   border-radius: 50%;
   position: absolute;
@@ -1037,22 +1040,22 @@ export const ease = {
   -webkit-animation: myfirst 4.8s infinite linear;
 }
 .ly2 {
-  width: 270px !important;
-  height: 270px !important;
+  width: 260px !important;
+  height: 260px !important;
   animation-delay: 1.2s;
   -webkit-animation-delay: 1.2s; /* Safari 和 Chrome */
   transform: rotate(33deg);
   -webkit-transform: rotate(33deg); /* Safari 和 Chrome */
 }
 .ly3 {
-  width: 270px !important;
-  height: 270px !important;
+  width: 260px !important;
+  height: 260px !important;
   animation-delay: 2.4s;
   -webkit-animation-delay: 2.4s; /* Safari 和 Chrome */
 }
 .ly4 {
-  width: 270px !important;
-  height: 270px !important;
+  width: 260px !important;
+  height: 260px !important;
   animation-delay: 3.6s;
   -webkit-animation-delay: 3.6s; /* Safari 和 Chrome */
 }
