@@ -1,4 +1,4 @@
-# music-web  ![版本 1.3](https://img.shields.io/badge/版本-1.3-red.svg)
+# w_music  ![版本 1.3](https://img.shields.io/badge/版本-1.3-red.svg)
 
 #### 基于vue的H5音乐播放器(仿某易云)🎧 ___ [预览demo](https://reedbf.github.io/R-music/dist/index.html)
 
