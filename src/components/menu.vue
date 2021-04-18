@@ -33,7 +33,7 @@
           </div>
           <div class="colorShow">
             <div
-              class="cellColor flex"
+              class="cellColor flex_cc"
               v-for="(item, index) in cBox"
               @click="setColor(item)"
               :key="index"

@@ -10,10 +10,10 @@
           <div class="r-art">{{ $store.state.playInfo.art }}</div>
         </div>
         <div class="playInfo" @click="changeShowTab()">
-          <div class="imgbox flex" v-show="AorB">
-            <!-- <div class="lianyi" :class='cdCls'>
-							<div :class='ddCls'><div class="mini"></div></div>
-						</div> -->
+          <div class="imgbox flex_cc" v-show="AorB">
+            <div class="lianyi" :class="cdCls">
+              <div :class="ddCls"><div class="mini"></div></div>
+            </div>
             <div class="lianyi ly2" :class="cdCls">
               <div :class="ddCls"><div class="mini m2"></div></div>
             </div>
@@ -44,49 +44,41 @@
           </div>
 
           <div class="miniCtrl">
-            <!-- <i
-              @click.stop="toggleLike()"
-              class="fa fa-heart-o BBbtn flex"
-              v-if="!isLike"
-            ></i>
             <i
               @click.stop="toggleLike()"
-              class="fa fa-heart BBbtn flex cRed"
-              v-if="isLike"
+              class="fa fa-heart BBbtn"
+              :class="isLike ? 'fa-heart cRed' : 'fa-heart-o'"
             ></i>
-            <i
-              @click.stop="openComment()"
-              class="fa fa-commenting-o BBbtn flex"
-            ></i> -->
-            <div
-              class="m_touch"
-              @touchstart.stop="touchstart"
-              @touchmove.stop="touchmove"
-              @touchend.stop="touchend"
-              ref="mtBox"
-            >
-              <!-- <div class="m_slider" ref="mtLine">
-                <div
-                  class="m_point"
-                  :style="{ left: (timeVal / maxTime) * 100 + '%' }"
-                ></div>
-                <div
-                  class="m_currentTime"
-                  :style="{
-                    width: (timeVal / maxTime) * 100 + '%',
-                    background: mColor,
-                  }"
-                ></div>
-              </div> -->
-              <!-- <el-slider
-                  :show-tooltip="false"
-                  v-model="timeVal"
-                  :max="maxTime"
-                  :change="changeCurrentTime(timeVal)"
-                  class="JDT"
-                ></el-slider> -->
-            </div>
+            <i @click.stop="openComment()" class="fa fa-commenting-o BBbtn"></i>
           </div>
+          <!-- <div
+            class="m_touch"
+            @touchstart.stop="touchstart"
+            @touchmove.stop="touchmove"
+            @touchend.stop="touchend"
+            ref="mtBox"
+          >
+            <div class="m_slider" ref="mtLine">
+              <div
+                class="m_point"
+                :style="{ left: (timeVal / maxTime) * 100 + '%' }"
+              ></div>
+              <div
+                class="m_currentTime"
+                :style="{
+                  width: (timeVal / maxTime) * 100 + '%',
+                  background: mColor,
+                }"
+              ></div>
+            </div>
+            <el-slider
+              :show-tooltip="false"
+              v-model="timeVal"
+              :max="maxTime"
+              :change="changeCurrentTime(timeVal)"
+              class="JDT"
+            ></el-slider>
+          </div> -->
         </div>
         <div class="play_bottom_space">
           <div class="play-box">
@@ -128,29 +120,24 @@
           </div>
           <div class="ctrlbox">
             <div class="loopBtn flex_cc" @click="setPlay">
-              <!-- <div class="ctrlB loop" v-if="playSet == 0"></div>
-              <div class="ctrlB loop1" v-if="playSet == 1"></div>
-              <div class="ctrlB random" v-if="playSet == 2"></div> -->
-              <img src="../assets/img/loop.png" v-if="playSet == 0"/>
-              <img src="../assets/img/loop1.png" v-if="playSet == 1"/>
-              <img src="../assets/img/random.png" v-if="playSet == 2"/>
+              <img src="../assets/img/loop.png" v-if="playSet == 0" />
+              <img src="../assets/img/loop1.png" v-else-if="playSet == 1" />
+              <img src="../assets/img/random.png" v-else-if="playSet == 2" />
             </div>
             <div class="beforeBtn flex_cc" @click="PreSong">
-              <!-- <div class="ctrlB before"></div> -->
               <img src="../assets/img/before.png" />
             </div>
             <div class="playBtn flex_cc" @click="startPlayOrPause()">
-              <!-- <div class="ctrlB play" v-if="!playIcon"></div>
-              <div class="ctrlB stop" v-if="playIcon"></div> -->
               <img v-if="!playIcon" src="../assets/img/play1.png" />
               <img v-else src="../assets/img/stop1.png" />
             </div>
             <div class="nextBtn flex_cc" @click="NextSong">
-              <!-- <div class="ctrlB next"></div> -->
               <img src="../assets/img/next.png" />
             </div>
-            <div class="listBtn flex_cc" @click="miniMusicList = !miniMusicList">
-              <!-- <div class="ctrlB list"></div> -->
+            <div
+              class="listBtn flex_cc"
+              @click="miniMusicList = !miniMusicList"
+            >
               <img src="../assets/img/list.png" />
             </div>
           </div>
@@ -194,12 +181,12 @@
                 v-for="(item, index) of $store.state.songList"
                 :key="index"
               >
-                <div class="flex">
+                <div class="flex_cc">
                   {{ item.name }}
                   <p class="art">{{ item.ar[0].name }}</p>
                 </div>
                 <i
-                  class="delMusic flex el-icon-close"
+                  class="delMusic flex_cc el-icon-close"
                   @click.stop="delMusic(index)"
                 ></i>
               </div>
@@ -651,9 +638,6 @@ export const ease = {
   transform: translate3d(0, 100%, 0);
   opacity: 0;
 }
-audio {
-  opacity: 0.1;
-}
 /* opacity: .2; */
 .cRed {
   color: #ffb5b0;
@@ -732,7 +716,7 @@ audio {
 .r-title {
   text-align: center;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
   line-height: 44px;
   user-select: none;
 }
@@ -740,6 +724,7 @@ audio {
   display: flex;
   align-items: center;
   margin-left: 10px;
+  font-size: 14px;
 }
 .imgbox {
   width: 250px;
@@ -750,7 +735,7 @@ audio {
 }
 .imgbox img {
   background: #fffcf5;
-  box-shadow: 0px 0px 0px 6px rgba(255, 255, 255, 0.36);
+  box-shadow: 0px 0px 0px 5px rgba(255, 255, 255, 0.36);
   display: block;
   width: 250px;
   height: 250px;
@@ -800,6 +785,21 @@ audio {
   margin: 1px 7.6vw;
   border: 1px solid #fff;
   border-radius: 50px;
+  position: relative;
+}
+.playBtn::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border-radius: 50px;
+}
+.playBtn:active {
+  box-shadow: 0 0 9px white;
+}
+.playBtn:active.playBtn::before {
+  box-shadow: inset 0 0 9px white;
 }
 .nextBtn {
   width: 40px;
@@ -948,15 +948,13 @@ audio {
   border-radius: 10px;
 }
 .miniCtrl {
-  width: 100%;
+  width: calc(100% - 60px);
   height: 44px;
-  padding: 0;
-  text-align: center;
+  padding: 0 30px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
   color: #fff;
-  bottom: -44px;
+  bottom: -24px;
   position: absolute;
 }
 .BBbtn {
@@ -975,7 +973,8 @@ audio {
 .video {
   position: absolute;
   top: 50px;
-  width: 100%;
+  left: -100vw;
+  width: 100vw;
 }
 .current {
   color: #fff;
@@ -1042,8 +1041,8 @@ audio {
   height: 270px !important;
   animation-delay: 1.2s;
   -webkit-animation-delay: 1.2s; /* Safari 和 Chrome */
-  transform:rotate(33deg);
-  -webkit-transform:rotate(33deg); /* Safari 和 Chrome */
+  transform: rotate(33deg);
+  -webkit-transform: rotate(33deg); /* Safari 和 Chrome */
 }
 .ly3 {
   width: 270px !important;
@@ -1097,11 +1096,10 @@ audio {
 
 @keyframes myfirst {
   0% {
-    -ms-transform: scale(1, 1); /* IE 9 */
-    -webkit-transform: scale(1, 1); /* Safari */
-    transform: scale(1, 1); /* 标准语法 */
+    -ms-transform: scale(.8,.8); /* IE 9 */
+    -webkit-transform: scale(.8,.8); /* Safari */
+    transform: scale(.8, .8); /* 标准语法 */
     opacity: 1;
-    
   }
 
   100% {
@@ -1115,9 +1113,9 @@ audio {
 
 @-webkit-keyframes myfirst {
   0% {
-    -ms-transform: scale(1, 1); /* IE 9 */
-    -webkit-transform: scale(1, 1); /* Safari */
-    transform: scale(1, 1); /* 标准语法 */
+    -ms-transform: scale(.8,.8); /* IE 9 */
+    -webkit-transform: scale(.8,.8); /* Safari */
+    transform: scale(.8,.8); /* 标准语法 */
     opacity: 1;
   }
 

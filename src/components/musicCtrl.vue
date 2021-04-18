@@ -13,16 +13,16 @@
         <p>{{ $store.state.playInfo.art }}</p>
       </div>
       <i
-        class="fa fa-play BBbtn flex"
+        class="fa fa-play BBbtn flex_cc"
         @click.stop="playCtrl()"
         v-if="!$store.state.playing"
       ></i>
       <i
-        class="fa fa-pause BBbtn flex"
+        class="fa fa-pause BBbtn flex_cc"
         @click.stop="playCtrl"
         v-if="$store.state.playing"
       ></i>
-      <i class="fa fa-step-forward BBbtn flex" @click.stop="nextPlay"></i>
+      <i class="fa fa-step-forward BBbtn flex_cc" @click.stop="nextPlay"></i>
     </div>
     <play v-show="playEvent" ref="playPage"></play>
   </div>
@@ -86,7 +86,7 @@ export default {
 }
 .BBbtn {
   width: 50px;
-  height: 50px;
+  line-height: 50px;
 }
 .BBinfo p {
   font-size: 10px;

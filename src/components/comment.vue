@@ -20,7 +20,7 @@
                   <p class="item2">{{item.user.nickname}}</p>
                   <p class="item3">{{getLocalTime(item.time)}}</p>
                 </div>
-                <div class="item4 flex"><p></p>11w<i class="fa fa-thumbs-o-up flex zan"></i></div>
+                <div class="item4 flex_cc"><p></p>11w<i class="fa fa-thumbs-o-up flex zan"></i></div>
               </div>
               <p class="item5">{{item.content}}</p>
               <a class="item6" href="">条回复></a>

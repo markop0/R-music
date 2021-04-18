@@ -7,15 +7,29 @@
             class="swiperBg"
             :style="{ background: $store.state.zColor }"
           ></div>
-          <swiper :options="swiperOption">
+          <swiper v-if="dataList" :options="swiperOption">
             <swiper-slide v-for="(item, index) of dataList" :key="index">
               <img class="lunbo" :src="item.imageUrl" />
             </swiper-slide>
             <div class="swiper-pagination" slot="pagination"></div>
           </swiper>
+          <swiper v-else :options="swiperOption">
+            <swiper-slide v-for="(item, index) of newSongList" :key="index">
+              <img class="lunbo bannerImg" :src="item.album.blurPicUrl" />
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
         </div>
-        <div class="homeNav">
-          <dir class="navBtn flex" @click="geto('everydayDaily')">
+        <!-- <div class="homeNav">
+          <dir class="navBtn flex_cc" @click="jumpArtists()">
+            <img
+              src="../assets/img/rt.png"
+              :style="{ background: $store.state.zColor }"
+              alt=""
+            />
+            <p class="nowDate">薛之谦</p>
+          </dir>
+          <dir class="navBtn flex_cc" @click="geto('everydayDaily')">
             <img
               src="../assets/img/rt.png"
               :style="{ background: $store.state.zColor }"
@@ -23,7 +37,7 @@
             />
             <p class="nowDate">每日推荐</p>
           </dir>
-          <dir class="navBtn flex" @click="geto('everydayDaily')">
+          <dir class="navBtn flex_cc" @click="geto('everydayDaily')">
             <img
               src="../assets/img/rt.png"
               :style="{ background: $store.state.zColor }"
@@ -31,7 +45,7 @@
             />
             <p class="nowDate">电台</p>
           </dir>
-          <dir class="navBtn flex" @click="geto('everydayDaily')">
+          <dir class="navBtn flex_cc" @click="geto('everydayDaily')">
             <img
               src="../assets/img/rt.png"
               :style="{ background: $store.state.zColor }"
@@ -39,7 +53,7 @@
             />
             <p class="nowDate">私人FM</p>
           </dir>
-          <dir class="navBtn flex" @click="geto('everydayDaily')">
+          <dir class="navBtn flex_cc" @click="geto('everydayDaily')">
             <img
               src="../assets/img/rt.png"
               :style="{ background: $store.state.zColor }"
@@ -47,18 +61,11 @@
             />
             <p class="nowDate">排行榜</p>
           </dir>
-          <dir class="navBtn flex" @click="geto('everydayDaily')">
-            <img
-              src="../assets/img/rt.png"
-              :style="{ background: $store.state.zColor }"
-              alt=""
-            />
-            <p class="nowDate">{{ nowDate }}</p>
-          </dir>
-        </div>
+          
+        </div> -->
         <div class="m-body">
           <a class="m-title" href=""
-            >推荐歌单<i class="fa fa-angle-right fa-2x"></i
+            >推荐歌单<i class="fa fa-angle-right"></i
           ></a>
           <div
             class="cellMusic"
@@ -123,6 +130,7 @@ export default {
       songCont: "",
       playSong: "",
       nowDete: "",
+      newSongList: null,
     };
   },
   components: {
@@ -132,10 +140,9 @@ export default {
     getData: function () {
       let D = new Date();
       this.nowDate = D.getDate();
+      this.getBannerPost();
+      this.getNewSong();
 
-      this.$axios.get("/banner?type=0").then((re) => {
-        this.dataList = re.data.banners;
-      });
       this.$axios.get("/personalized").then((re) => {
         this.recommendList = re.data.result;
 
@@ -149,12 +156,34 @@ export default {
         });
       });
     },
+    getNewSong() {
+      this.$axios.get("/top/song?type=7").then((res) => {
+        res.data.data.length = 5;
+        this.newSongList = res.data.data;
+      });
+    },
+    getBannerPost() {
+      this.$axios
+        .get("/banner?type=0")
+        .then((re) => {
+          this.dataList = re.data.banners;
+        })
+        .catch((err) => {
+          this.dataList = null;
+        });
+    },
+    jumpArtists() {},
   },
 };
 </script>
 
 <style scoped>
 /* ----------------------------------- */
+.bannerImg {
+  height: 136px;
+  object-fit: cover;
+  object-position: 0% 20%;
+}
 .mImg-bg-icon {
   position: absolute;
   width: 88.8%;

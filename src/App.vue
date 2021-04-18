@@ -97,8 +97,8 @@ body {
 input:focus {
   outline: none;
 }
-.flex ,.flex_cc {
-  display: flex;
+.flex_cc {
+  display: flex!important;
   align-items: center;
   justify-content: center;
 }
