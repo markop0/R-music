@@ -1,7 +1,8 @@
 # music-web
 
 #### 基于vue的H5音乐播放器(仿某易云)🎧
-![image](https://user-images.githubusercontent.com/25838726/115135726-3f4f0000-a04d-11eb-8b8c-0d6813316603.png) ![image](https://user-images.githubusercontent.com/25838726/115135794-c8fecd80-a04d-11eb-9ebd-521f185a9018.png)
+![image](https://user-images.githubusercontent.com/25838726/115135813-006d7a00-a04e-11eb-9d1f-261ca2125e01.png)
+![image](https://user-images.githubusercontent.com/25838726/115135794-c8fecd80-a04d-11eb-9ebd-521f185a9018.png)
 
 
 > 
