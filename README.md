@@ -1,6 +1,7 @@
 # music-web
 
-> A Vue.js project
+> 基于vue的H5音乐播放器(仿某易云)🎧
+> 
 
 ## Build Setup
 
