@@ -728,10 +728,9 @@ export const ease = {
 }
 .imgbox {
   width: 250px;
-  height: 122vw;
   border-radius: 50%;
   margin: auto;
-  padding-top: 14vw;
+  padding-top: 18vh;
 }
 .imgbox img {
   background: #fffcf5;
@@ -770,8 +769,8 @@ export const ease = {
   justify-content: center;
   align-items: center;
 }
-.ctrlbox>div:active{
-  filter: drop-shadow(0px 0px 2px #fff );
+.ctrlbox > div:active {
+  filter: drop-shadow(0px 0px 2px #fff);
 }
 .listBtn {
   width: 40px;
@@ -1099,9 +1098,9 @@ export const ease = {
 
 @keyframes myfirst {
   0% {
-    -ms-transform: scale(.8,.8); /* IE 9 */
-    -webkit-transform: scale(.8,.8); /* Safari */
-    transform: scale(.8, .8); /* 标准语法 */
+    -ms-transform: scale(0.9, 0.9); /* IE 9 */
+    -webkit-transform: scale(0.9, 0.9); /* Safari */
+    transform: scale(0.9, 0.9); /* 标准语法 */
     opacity: 1;
   }
 
@@ -1116,9 +1115,9 @@ export const ease = {
 
 @-webkit-keyframes myfirst {
   0% {
-    -ms-transform: scale(.8,.8); /* IE 9 */
-    -webkit-transform: scale(.8,.8); /* Safari */
-    transform: scale(.8,.8); /* 标准语法 */
+    -ms-transform: scale(0.9, 0.9); /* IE 9 */
+    -webkit-transform: scale(0.9, 0.9); /* Safari */
+    transform: scale(0.9, 0.9); /* 标准语法 */
     opacity: 1;
   }
 

@@ -69,7 +69,7 @@ export default {
       userInfo: {
         nickname:'Avery',
         avatarUrl:'https://avatars.githubusercontent.com/u/25838726?v=4',
-        backgroundUrl:'../assets/img/menuBg.jpg'
+        backgroundUrl:'https://github.com/reedbf/R-music/raw/master/src/assets/img/menuBg.jpg'
       },
       login: "",
       menuList: [
@@ -168,10 +168,10 @@ export default {
   flex-wrap: wrap;
 }
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50px;
-  margin: 40px 170px 10px 10px;
+  margin: 20px 170px 10px 10px;
 }
 .us-name {
   font-size: 16px;

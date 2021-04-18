@@ -5,7 +5,7 @@
 ![image](https://user-images.githubusercontent.com/25838726/115135813-006d7a00-a04e-11eb-9d1f-261ca2125e01.png)
 ![image](https://user-images.githubusercontent.com/25838726/115135794-c8fecd80-a04d-11eb-9ebd-521f185a9018.png)
 
-#### 此项目仅供个人学习、研究之用，请勿用于商业用途
+#### 此项目仅供个人学习、研究之用，请勿用于商业用途,违者自行承担相关法律责任
 
 
 #### Build Setup
