@@ -1,7 +1,6 @@
 # music-web
 
-#### 基于vue的H5音乐播放器(仿某易云)🎧  
-> [预览demo](https://reedbf.github.io/R-music/dist/index.html/)
+#### 基于vue的H5音乐播放器(仿某易云)🎧     [预览demo](https://reedbf.github.io/R-music/dist/index.html/)
 
 ![image](https://user-images.githubusercontent.com/25838726/115135813-006d7a00-a04e-11eb-9d1f-261ca2125e01.png)
 ![image](https://user-images.githubusercontent.com/25838726/115135794-c8fecd80-a04d-11eb-9ebd-521f185a9018.png)
