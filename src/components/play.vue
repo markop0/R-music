@@ -79,19 +79,25 @@
               class="JDT"
             ></el-slider>
           </div> -->
+          <div
+            style="width: 100vw"
+            @touchstart.stop="userCtrl = true"
+            @touchend.stop="userCtrl = false"
+          >
+            <el-slider
+              :show-tooltip="false"
+              v-model="timeVal"
+              :max="maxTime"
+              :change="changeCurrentTime(timeVal)"
+              class="JDT"
+            ></el-slider>
+          </div>
         </div>
         <div class="play_bottom_space">
           <div class="play-box">
             <div class="left">
               <div class="info">
                 <div class="size">{{ currentTime }}</div>
-                <!-- <el-slider
-                  :show-tooltip="false"
-                  v-model="timeVal"
-                  :max="maxTime"
-                  :change="changeCurrentTime(timeVal)"
-                  class="JDT"
-                ></el-slider> -->
 
                 <div
                   class="m_touch"
@@ -327,6 +333,7 @@ export default {
     },
     // 改变播放节点
     touchstart(e) {
+      console.log("touchstart");
       this.userCtrl = true;
       this.getSpaceData();
       let obj = e.changedTouches[0];
@@ -377,17 +384,19 @@ export default {
       this.userCtrl = false; //解除用户控制，恢复音乐跳秒
     },
     changeCurrentTime(e) {
-      if (this.$refs.audio) {
-        if (e !== this.$refs.audio.duration) {
-          let nowTime = Date.now();
-          let gapTime = 100;
-          // console.log(nowTime - this.lastTime);
-          if (!this.lastTime || nowTime - this.lastTime > gapTime) {
-            if (Math.abs(e - this.$refs.audio.currentTime) > 1) {
-              this.pFn.debounce(this.setPlayPosition(e), 2000);
-              // console.log(Math.abs(e - this.$refs.audio.currentTime));
-              // console.log("setPlayPosition");
-            }
+      console.log(this.lastTime);
+      if (this.$refs.audio && e !== this.$refs.audio.duration) {
+        let nowTime = Date.now();
+        let gapTime = 100;
+        // console.log(nowTime - this.lastTime);
+        if (!this.lastTime || nowTime - this.lastTime > gapTime) {
+          if (
+            Math.abs(e - this.$refs.audio.currentTime) > 1 &&
+            this.userCtrl == false
+          ) {
+            this.pFn.debounce(this.setPlayPosition(e), 2000);
+            // console.log(Math.abs(e - this.$refs.audio.currentTime));
+            console.log("setPlayPosition");
           }
         }
       }
