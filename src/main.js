@@ -16,8 +16,8 @@ import "swiper/dist/css/swiper.css";
 Vue.use(VueAwesomeSwiper /* { default global options } */);
 import axios from "axios";
 Vue.prototype.$axios = axios;
-// step3：使每次请求都会带一个 /api 前缀
-axios.defaults.baseURL = "http://musicapi.leanapp.cn";
+
+axios.defaults.baseURL = "https://ncm-api-m3rapug7p-reedbf.vercel.app/";
 Vue.prototype.api1 = "/api";
 
 Vue.use(ElementUI);
@@ -30,12 +30,12 @@ Vue.prototype.$BScroll = BScroll;
 import pFn from "./until/public.js";
 Vue.prototype.pFn = pFn;
 
-import store from "./store"; //引入store
+import store from "./store"; 
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
   router,
-  store, // 将 store 实例从根组件中‘注入’到每一个子组件中，子组件通过 `this.$store` 调用
+  store, 
   components: { App },
   template: "<App/>"
 });
@@ -93,7 +93,6 @@ Vue.prototype.openSongList = function (e) {
   this.songList = [];
   // this.$router.push({ path: `/home1/musicList` })
   // this.$router.push({ path: 'musicList', query: { id: e } });
-  // this.$router.push({ path: '/home1/musicList' })
   this.songCont = e;
   this.$nextTick(() => {
     this.$refs.mySong.showToggle(0);
