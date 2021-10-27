@@ -10,24 +10,26 @@
           <div class="r-art">{{ $store.state.playInfo.art }}</div>
         </div>
         <div class="playInfo" @click="changeShowTab()">
-          <div class="imgbox flex_cc" v-show="AorB">
-            <div class="lianyi" :class="cdCls">
-              <div :class="ddCls"><div class="mini"></div></div>
+          <div v-show="AorB">
+            <div class="imgbox flex_cc">
+              <div class="lianyi" :class="cdCls">
+                <div :class="ddCls"><div class="mini"></div></div>
+              </div>
+              <div class="lianyi ly2" :class="cdCls">
+                <div :class="ddCls"><div class="mini m2"></div></div>
+              </div>
+              <div class="lianyi ly3" :class="cdCls">
+                <div :class="ddCls"><div class="mini m3"></div></div>
+              </div>
+              <div class="lianyi ly4" :class="cdCls">
+                <div :class="ddCls"><div class="mini m4"></div></div>
+              </div>
+              <!-- :class="playIcon?'':'cs3pause'" -->
+              <img
+                :class="[playing ? 'onplay' : 'onplay pause']"
+                :src="$store.state.playInfo.bgurl"
+              />
             </div>
-            <div class="lianyi ly2" :class="cdCls">
-              <div :class="ddCls"><div class="mini m2"></div></div>
-            </div>
-            <div class="lianyi ly3" :class="cdCls">
-              <div :class="ddCls"><div class="mini m3"></div></div>
-            </div>
-            <div class="lianyi ly4" :class="cdCls">
-              <div :class="ddCls"><div class="mini m4"></div></div>
-            </div>
-            <!-- :class="playIcon?'':'cs3pause'" -->
-            <img
-              :class="[playing ? 'onplay' : 'onplay pause']"
-              :src="$store.state.playInfo.bgurl"
-            />
           </div>
           <div class="geci" ref="geciBox" v-show="!AorB">
             <div class="geciBox">
@@ -79,7 +81,7 @@
               class="JDT"
             ></el-slider>
           </div> -->
-          <div
+          <!-- <div
             style="width: 100vw"
             @touchstart.stop="userCtrl = true"
             @touchend.stop="userCtrl = false"
@@ -91,7 +93,7 @@
               :change="changeCurrentTime(timeVal)"
               class="JDT"
             ></el-slider>
-          </div>
+          </div> -->
         </div>
         <div class="play_bottom_space">
           <div class="play-box">
@@ -115,7 +117,7 @@
                       class="m_currentTime"
                       :style="{
                         width: (timeVal / maxTime) * 100 + '%',
-                        background: mColor,
+                        background: mColor
                       }"
                     ></div>
                   </div>
@@ -168,7 +170,7 @@
       <div
         class="palymask"
         v-bind:style="{
-          backgroundImage: 'url(' + $store.state.playInfo.bgurl + ')',
+          backgroundImage: 'url(' + $store.state.playInfo.bgurl + ')'
         }"
       ></div>
       <div class="blackmask" v-show="!AorB"></div>
@@ -240,12 +242,12 @@ export default {
       wHight: null,
       tStart: {},
       tEnd: {},
-      userCtrl: false,
+      userCtrl: false
       // isEnd:this.$refs.audio.ended
     };
   },
   components: {
-    comment: comment,
+    comment: comment
   },
   computed: {
     cdCls() {
@@ -253,7 +255,7 @@ export default {
     },
     ddCls() {
       return this.playing ? "dian" : "dian pause";
-    },
+    }
   },
   mounted() {
     this.getData();
@@ -456,18 +458,18 @@ export default {
         .get(
           "/like?id=" + this.$store.state.playInfo.id + "&like=" + !this.isLike
         )
-        .then((re) => {
+        .then(re => {
           consloe.log(this.isLike);
           this.isLike = !this.isLike;
         });
     },
     //切换 歌词/CD图
     changeShowTab() {
-      // this.AorB = !this.AorB;
+      this.AorB = !this.AorB;
     },
     sollorder() {
       this.detailWrapper = new BScroll(this.$refs.geciBox, {
-        click: true, //开启点击事件 默认为false
+        click: true //开启点击事件 默认为false
       });
     },
     // 控制音频的播放与暂停
@@ -505,7 +507,7 @@ export default {
         name: A[nextNum].name,
         art: Artists,
         bgurl: Bgurl,
-        index: nextNum,
+        index: nextNum
       };
       this.$store.state.playInfo = songInfo;
       this.getMusicUrl();
@@ -530,7 +532,7 @@ export default {
         name: A[nextNum].name,
         art: Artists,
         bgurl: Bgurl,
-        index: nextNum,
+        index: nextNum
       };
       this.$store.state.playInfo = songInfo;
       this.getMusicUrl();
@@ -538,8 +540,8 @@ export default {
     // 获取歌曲链接
     getMusicUrl() {
       this.$axios
-        .get("/music/url?id=" + this.$store.state.playInfo.id)
-        .then((re) => {
+        .get("/song/url?id=" + this.$store.state.playInfo.id)
+        .then(re => {
           re.data.code != 200
             ? ""
             : (this.$store.state.audio = re.data.data[0].url);
@@ -565,33 +567,31 @@ export default {
     },
     // 获取歌词
     getGeCi() {
-      this.$axios
-        .get("/lyric?id=" + this.$store.state.playInfo.id)
-        .then((re) => {
-          console.log("歌词");
-          var geci = [];
-          if (re.data.lrc !== undefined) {
-            var gc = re.data.lrc.lyric;
-            var gcArr = gc.split("[");
-            for (var i in gcArr) {
-              var now = gcArr[i].split("]");
-              var nt = now[0].split(":"); //nowTime
+      this.$axios.get("/lyric?id=" + this.$store.state.playInfo.id).then(re => {
+        console.log("歌词");
+        var geci = [];
+        if (re.data.lrc !== undefined) {
+          var gc = re.data.lrc.lyric;
+          var gcArr = gc.split("[");
+          for (var i in gcArr) {
+            var now = gcArr[i].split("]");
+            var nt = now[0].split(":"); //nowTime
 
-              var rowGC = { time: nt[0] * 60 + Number(nt[1]), txt: now[1] };
-              geci.push(rowGC);
-            }
-            this.geci = geci;
-          } else {
-            this.geci = ["暂无歌词"];
+            var rowGC = { time: nt[0] * 60 + Number(nt[1]), txt: now[1] };
+            geci.push(rowGC);
           }
+          this.geci = geci;
+        } else {
+          this.geci = ["暂无歌词"];
+        }
 
-          this.$nextTick(() => {
-            //$refs绑定元素
-            if (!this.scroll) {
-              this.scroll = new BScroll(this.$refs.playbox);
-            }
-          });
+        this.$nextTick(() => {
+          //$refs绑定元素
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.playbox);
+          }
         });
+      });
       // this.btScroll();
     },
     //歌词位置跳转
@@ -605,31 +605,31 @@ export default {
           return;
         }
       }
-    },
-  },
+    }
+  }
 };
 export const ease = {
   // easeOutQuint
   swipe: {
     style: "cubic-bezier(0.23, 1, 0.32, 1)",
-    fn: function (t) {
+    fn: function(t) {
       return 1 + --t * t * t * t * t;
-    },
+    }
   },
   // easeOutQuard
   swipeBounce: {
     style: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-    fn: function (t) {
+    fn: function(t) {
       return t * (2 - t);
-    },
+    }
   },
   // easeOutQuart
   bounce: {
     style: "cubic-bezier(0.165, 0.84, 0.44, 1)",
-    fn: function (t) {
+    fn: function(t) {
       return 1 - --t * t * t * t;
-    },
-  },
+    }
+  }
 };
 </script>
 

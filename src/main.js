@@ -30,22 +30,22 @@ Vue.prototype.$BScroll = BScroll;
 import pFn from "./until/public.js";
 Vue.prototype.pFn = pFn;
 
-import store from "./store"; 
+import store from "./store";
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
   router,
-  store, 
+  store,
   components: { App },
   template: "<App/>"
 });
 // *** 公共函数 ***
-Vue.prototype.toggleTab = function (e) {
+Vue.prototype.toggleTab = function(e) {
   sessionStorage.setItem("homeID", e);
   this.homeID = e;
   this.$router.push({ path: "home" + e });
 };
-Vue.prototype.geto = function (e) {
+Vue.prototype.geto = function(e) {
   this.$router.push({ path: e });
   if (e == "menu") {
     this.showToggle(1);
@@ -56,7 +56,7 @@ Vue.prototype.geto = function (e) {
   // })
 };
 //页面切换
-Vue.prototype.showToggle = function (e) {
+Vue.prototype.showToggle = function(e) {
   console.log(this.showDetail + "   --!--");
   this.showDetail = !this.showDetail;
   if (this.showDetail) {
@@ -67,7 +67,7 @@ Vue.prototype.showToggle = function (e) {
   //   console.log(this.detailWrapper);
   // }
 };
-Vue.prototype.showToggle1 = function (e) {
+Vue.prototype.showToggle1 = function(e) {
   console.log(this.showDetail1 + "--->");
   // this.songId = ''
   // this.getData()
@@ -77,7 +77,7 @@ Vue.prototype.showToggle1 = function (e) {
   }
 };
 // 初始化better-scroll
-Vue.prototype.btScroll = function () {
+Vue.prototype.btScroll = function() {
   this.$nextTick(() => {
     if (!this.detailWrapper) {
       this.sollorder();
@@ -87,8 +87,8 @@ Vue.prototype.btScroll = function () {
   });
 };
 //打开歌单
-Vue.prototype.openSongList = function (e) {
-  console.log('openSongList');
+Vue.prototype.openSongList = function(e) {
+  console.log("openSongList");
 
   this.songList = [];
   // this.$router.push({ path: `/home1/musicList` })
@@ -96,11 +96,10 @@ Vue.prototype.openSongList = function (e) {
   this.songCont = e;
   this.$nextTick(() => {
     this.$refs.mySong.showToggle(0);
-
   });
 };
 // 打开播放页
-Vue.prototype.playSong = function (q, w, e, r, index) {
+Vue.prototype.playSong = function(q, w, e, r, index) {
   console.log("打开播放页");
   this.$store.commit("togglePlay");
   if (q != undefined) {
@@ -111,20 +110,14 @@ Vue.prototype.playSong = function (q, w, e, r, index) {
     // console.log(sessionStorage.getItem('playInfo'))
     // 获取歌曲链接
     this.$axios
-      .get(
-        "/music/url?id=" +
-        this.$store.state.playInfo.id
-      )
+      .get("/song/url?id=" + this.$store.state.playInfo.id)
       .then(re => {
         // this.musicInfo.push({'audio':re.data.data[0].url})
         // this.audio = re.data.data[0].url
         if (re.data.code == 200) {
           that.$store.state.audio = re.data.data[0].url;
           this.$axios
-            .get(
-              "/song/detail?ids=" +
-              this.$store.state.playInfo.id
-            )
+            .get("/song/detail?ids=" + this.$store.state.playInfo.id)
             .then(re => {
               if (re.data.code == 200) {
                 that.$store.state.playInfo.bgurl = re.data.songs[0].al.picUrl;
@@ -145,17 +138,17 @@ Vue.prototype.playSong = function (q, w, e, r, index) {
   }
   // this.$store.state.songInfo=songInfo
 };
-Vue.prototype.openComment = function () {
+Vue.prototype.openComment = function() {
   this.$store.commit("toggleC");
   this.$refs.comment.getData();
 };
-Vue.prototype.playAll = function (e) {
+Vue.prototype.playAll = function(e) {
   let Num = e.length;
 };
 
 Vue.directive("focus", {
   // 当被绑定的元素插入到 DOM 中时……
-  inserted: function (el) {
+  inserted: function(el) {
     // 聚焦元素
     el.focus();
   }
